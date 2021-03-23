@@ -1,9 +1,12 @@
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>Smart Tape feed</title>
     </head>
     <body>
-        <h1 style="font-family: Consolas">Smart Tape</h1>
+        <h1 style="font-family: 'Corbel Light'">Smart Tape</h1>
+        <div style="font-family: Consolas" th:utext="${keysFragment}" />
+        <a href="/nl-feed?Status=alive&InProgress=false&IsExample=true&РусскийТекс=false">Пример.</a>
+        <a href="/nl-feed">Очистить.</a>
     </body>
 </html>
