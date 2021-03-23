@@ -14,6 +14,16 @@ public class SimpleRequestResolver extends RequestResolver {
     }
 
     @Override
+    public void setPresentation(Presentation presentation) {
+        super.setPresentation(presentation);
+    }
+
+    @Override
+    public Presentation getPresentation() {
+        return super.getPresentation();
+    }
+
+    @Override
     public String resolve(HttpServletRequest request) {
         ArrayList<String> lines = new ArrayList<>();
         request.getParameterMap().forEach((x, y) -> {

@@ -8,7 +8,7 @@ public class SimplePresentation implements Presentation {
         if (lines.length > 0) {
             builder.append("<ul>\n");
             for (String line : lines)
-                builder.append("<li>").append(line.toString()).append("</li>\n");
+                builder.append("<li>").append(line).append("</li>\n");
             builder.append("</ul>");
         } else {
             builder.append("<p>").append("<i>no args</i>").append("</p>\n");
