@@ -68,6 +68,13 @@
 
     <build>
         <finalName>SmartTape</finalName>
+        <resources>
+            <resource>
+                <directory>
+                    src/main/webapp/WEB-INF
+                </directory>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
