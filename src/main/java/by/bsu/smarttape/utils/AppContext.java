@@ -25,6 +25,12 @@ public class AppContext {
         return context;
     }
 
+    /**
+     *
+     * @param name -
+     * @return
+     */
+
     public static Object getBean(String name) {
         return context.getBean(name);
     }

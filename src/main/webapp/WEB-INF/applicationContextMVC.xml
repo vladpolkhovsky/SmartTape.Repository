@@ -33,10 +33,4 @@
         <property name="characterEncoding" value="UTF-8"/>
     </bean>
 
-    <bean name="requestResolver" class="by.bsu.smarttape.utils.SimpleRequestResolver">
-        <constructor-arg ref="presentation" />
-    </bean>
-
-    <bean name="presentation" class="by.bsu.smarttape.utils.presentation.SimplePresentation"/>
-
 </beans>
