@@ -3,6 +3,34 @@
     <head>
         <meta charset="UTF-8">
         <title>Регистрация</title>
+        <link th:href="@{/static/styles/registration-style.css}" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
     </head>
-    <body th:utext="${resultForm}" />
+    <body>
+        <div class="information-message" th:attr="status-code=${status.getStatus()}">
+            <div th:class="${status.getStatus() == 0 ? 'r-ok' : 'r-error'}" th:classappend="registration-status">
+                <h3 class="status-code-s" th:text="'Статус регистрации : ' + ${status.getStatus() == 0 ? 'OK' : 'ERROR'}"/>
+                <div class="info">
+
+                    <div class="r-error-description" th:if="${status.getStatus() != 0}">
+                        <h4 th:text="${status.getMessage()}" />
+
+                        <ul th:attr="login=${status.getLoginMessage()},email=${status.getEmailMessage()},password=${status.getPasswordMessage()}">
+                            <li th:if="${status.getLoginMessage() != 'OK'}">    <b>Имя пользователя:</b> <p th:text="${status.getLoginMessage()}" /></li>
+                            <li th:if="${status.getEmailMessage() != 'OK'}">    <b>Email:</b> <p th:text="${status.getEmailMessage()}" /></li>
+                            <li th:if="${status.getPasswordMessage() != 'OK'}"> <b>Пароль:</b> <p th:text="${status.getPasswordMessage()}" /></li>
+                        </ul>
+                    </div>
+
+                    <div class="r-ok-description" th:if="${status.getStatus() == 0"}>
+                        <h4 th:text="${status.getMessage()}" />
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

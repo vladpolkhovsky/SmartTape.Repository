@@ -1,0 +1,74 @@
+.registration-form {
+    margin: auto auto;
+}
+
+.information-message {
+    width: 800px;
+    height: 500px;
+    margin: 0 auto;
+}
+
+.status-code-s {
+    font-family: 'Nanum Gothic', 'Comfortaa', sans-serif;
+}
+
+body {
+    margin: 0;
+    background-color: #F3F3F3;
+}
+
+.info {
+    background-color: white;
+}
+
+.r-ok {
+    color: black;
+}
+
+.r-error-description, .r-ok-description {
+    color: black;
+    padding-left: 15px;
+    padding-top: 15px;
+}
+
+h4 {
+    font-family: 'Comfortaa', sans-serif;
+}
+
+.r-error-description li {
+    display: flex;
+}
+
+.r-error-description h4 {
+    margin-top: 5px;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+.r-error-description li b {
+    width: 200px;
+    font-family: 'Comfortaa', sans-serif;
+    font-weight: bold;
+}
+
+.r-error-description li p {
+    margin: 0;
+    margin-left: 20px;
+    font-family: 'Comfortaa', sans-serif;
+    font-weight: lighter;
+    font-style: italic;
+}
+
+.r-error h3, .r-ok h3 {
+    margin-bottom: 10px;
+}
+
+.r-error {
+    color: #ff5a5a;
+}
+
+.registration-status {
+
+}
