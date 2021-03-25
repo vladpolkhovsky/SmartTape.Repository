@@ -9,27 +9,32 @@
         <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
     </head>
     <body>
-        <div class="information-message" th:attr="status-code=${status.getStatus()}">
-            <div th:class="${status.getStatus() == 0 ? 'r-ok' : 'r-error'}" th:classappend="registration-status">
-                <h3 class="status-code-s" th:text="'Статус регистрации : ' + ${status.getStatus() == 0 ? 'OK' : 'ERROR'}"/>
-                <div class="info">
-
-                    <div class="r-error-description" th:if="${status.getStatus() != 0}">
-                        <h4 th:text="${status.getMessage()}" />
-
-                        <ul th:attr="login=${status.getLoginMessage()},email=${status.getEmailMessage()},password=${status.getPasswordMessage()}">
-                            <li th:if="${status.getLoginMessage() != 'OK'}">    <b>Имя пользователя:</b> <p th:text="${status.getLoginMessage()}" /></li>
-                            <li th:if="${status.getEmailMessage() != 'OK'}">    <b>Email:</b> <p th:text="${status.getEmailMessage()}" /></li>
-                            <li th:if="${status.getPasswordMessage() != 'OK'}"> <b>Пароль:</b> <p th:text="${status.getPasswordMessage()}" /></li>
-                        </ul>
-                    </div>
-
-                    <div class="r-ok-description" th:if="${status.getStatus() == 0"}>
-                        <h4 th:text="${status.getMessage()}" />
-
-                    </div>
-
-                </div>
+        <div class="status-area" th:if="${status.getStatus() == 0}">
+            <h1 class="block-header ok-status tabbed">Статус регистрация: OK</h1>
+            <div class="status-description">
+                <p th:text="${status.getMessage()}"/>
+                <a class="st-button tabbed" href="/index.jsp">Войти</a>
+            </div>
+        </div>
+        <div class="status-area" th:if="${status.getStatus() == 1}">
+            <h1 class="block-header error-status tabbed">Статус регистрация: Error</h1>
+            <div class="status-description">
+                <p th:text="${status.getMessage()}"/>
+                <ul>
+                    <li th:if="${status.getLoginMessage() != 'OK'}">
+                        <span class="status-error-caption">Имя пользователя</span>
+                        <span class="status-error-description tabbed" th:text="${status.getLoginMessage()}" />
+                    </li>
+                    <li th:if="${status.getEmailMessage() != 'OK'}">
+                        <span class="status-error-caption">Email</span>
+                        <span class="status-error-description tabbed" th:text="${status.getEmailMessage()}" />
+                    </li>
+                    <li th:if="${status.getPasswordMessage() != 'OK'}">
+                        <span class="status-error-caption">Пароль</span>
+                        <span class="status-error-description tabbed" th:text="${status.getPasswordMessage()}" />
+                    </li>
+                </ul>
+                <a class="st-button tabbed" href="/registration-form">Регистрация</a>
             </div>
         </div>
     </body>

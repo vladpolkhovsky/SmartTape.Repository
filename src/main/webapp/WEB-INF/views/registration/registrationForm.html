@@ -1,17 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <title>Регистрация</title>
+        <link th:href="@{/static/styles/registration-style.css}" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
     </head>
     <body>
         <div class="registration-form">
-            <form method="post" action="/registration-form" id="registration-form">
-                <input type="text" name="user_name" placeholder="username" required>
-                <input type="email" name="email" placeholder="name@gmail.com" required>
-                <input type="password" name="password" placeholder="name@gmail.com" required>
-                <input type="submit">
+            <h1 class="block-header tabbed">Регистарация</h1>
+            <form class="vertical-form" method="post" action="/registration-form" id="registration-form">
+                <input id="user-name" type="text" name="user_name" placeholder="Ваше имя" required />
+                <input id="email" type="email" name="email" placeholder="Ваш e-mail" required />
+                <input id="password-1" type="password" name="password" placeholder="Пароль" required />
+                <input id="password-2" type="password" name="password" placeholder="Повторите пароль" required />
+                <span id="password-checker-span" class="password-checker"></span>
+                <input id="button-submit" class="st-button" type="submit" value="Зарегистрироваться" />
             </form>
         </div>
+        <script th:src="@{/static/scripts/reg-form-checker.js}"></script>
     </body>
 </html>

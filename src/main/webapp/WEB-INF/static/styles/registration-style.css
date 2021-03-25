@@ -1,74 +1,123 @@
-.registration-form {
-    margin: auto auto;
-}
-
-.information-message {
-    width: 800px;
-    height: 500px;
-    margin: 0 auto;
-}
-
-.status-code-s {
-    font-family: 'Nanum Gothic', 'Comfortaa', sans-serif;
-}
-
 body {
     margin: 0;
     background-color: #F3F3F3;
 }
 
-.info {
+.status-area {
+    margin: auto;
+    width: 80%;
+    max-width: 800px;
+    min-width: 400px
+}
+
+.block-header {
+    font-family: 'Comfortaa', sans-serif;
+}
+
+.tabbed {
+    margin-left: 20px;
+}
+
+.status-description {
+    margin: 0 auto;
+    font-family: 'Comfortaa', sans-serif;
+    font-size: medium;
     background-color: white;
+    border-radius: 10px;
+    padding: 10px 10px 10px 10px;
 }
 
-.r-ok {
+.ok-status {
     color: black;
 }
 
-.r-error-description, .r-ok-description {
-    color: black;
-    padding-left: 15px;
-    padding-top: 15px;
-}
-
-h4 {
-    font-family: 'Comfortaa', sans-serif;
-}
-
-.r-error-description li {
+.st-button {
     display: flex;
-}
+    justify-content: center;
+    align-items: center;
 
-.r-error-description h4 {
-    margin-top: 5px;
-}
+    height: 45px;
+    width: 130px;
 
-ul {
-    padding-left: 20px;
-}
+    border-radius: 10px;
+    background-color: #6E00B3;
+    color: white;
 
-.r-error-description li b {
-    width: 200px;
+    padding: auto auto;
+
     font-family: 'Comfortaa', sans-serif;
+    text-decoration: none;
+}
+
+.st-button:visited, .st-button:link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 45px;
+    width: 130px;
+
+    border-radius: 10px;
+    background-color: #6E00B3;
+    color: white;
+
+    padding: auto auto;
+
+    font-family: 'Comfortaa', sans-serif;
+    text-decoration: none;
+}
+
+.error-status {
+    color: red;
+}
+
+li {
+    display: flex;
+    margin-top: 20px;
+}
+
+.status-error-caption {
+    min-width: 200px;
     font-weight: bold;
 }
 
-.r-error-description li p {
-    margin: 0;
-    margin-left: 20px;
+.registration-form {
+    margin: auto;
+    width: 80%;
+    max-width: 500px;
+    min-width: 350px
+}
+
+.vertical-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 10px;
+    padding: 0px 0px 20px 0px;
+}
+
+.vertical-form input {
+    padding-left: 20px;
+    margin-top: 20px;
+
+    width: 280px;
+    height: 40px;
+
     font-family: 'Comfortaa', sans-serif;
-    font-weight: lighter;
-    font-style: italic;
+    font-size: 20px;
+
+    border: 2px solid #B3B3B3;
+    border-radius: 10px;
 }
 
-.r-error h3, .r-ok h3 {
-    margin-bottom: 10px;
+.vertical-form input:focus {
+    outline: none;
 }
 
-.r-error {
-    color: #ff5a5a;
-}
-
-.registration-status {
-
+.password-checker {
+    font-family: 'Comfortaa', sans-serif;
+    color: #6E00B3;
+    padding-top: 5px;
 }
