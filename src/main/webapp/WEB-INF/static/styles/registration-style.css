@@ -47,6 +47,17 @@ body {
 
     font-family: 'Comfortaa', sans-serif;
     text-decoration: none;
+    transition: all 1s;
+}
+
+.st-button:hover {
+    background-color: #400068;
+    transition: all 1s;
+}
+
+.st-button:disabled {
+    background-color: #bd52ff;
+    transition: all 0.5s;
 }
 
 .st-button:visited, .st-button:link {
@@ -98,7 +109,7 @@ li {
     padding: 0px 0px 20px 0px;
 }
 
-.vertical-form input {
+.vertical-form input[type="email"], .vertical-form input[type="password"], .vertical-form input[type="text"]  {
     padding-left: 20px;
     margin-top: 20px;
 
@@ -110,6 +121,23 @@ li {
 
     border: 2px solid #B3B3B3;
     border-radius: 10px;
+}
+
+.vertical-form input[type="email"]:hover, .vertical-form input[type="password"]:hover, .vertical-form input[type="text"]:hover {
+    border: 2px solid black;
+    transition: all 0.5s;
+}
+
+.vertical-form input[type="submit"] {
+    margin-top: 20px;
+
+    width: 280px;
+    height: 40px;
+
+    font-family: 'Comfortaa', sans-serif;
+    font-size: 20px;
+
+    border-color: white;
 }
 
 .vertical-form input:focus {
