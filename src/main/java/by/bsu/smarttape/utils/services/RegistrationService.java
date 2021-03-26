@@ -1,6 +1,9 @@
 package by.bsu.smarttape.utils.services;
 
 import by.bsu.smarttape.forms.UserRegistrationForm;
+import by.bsu.smarttape.models.User;
+import by.bsu.smarttape.utils.UserService;
+import by.bsu.smarttape.utils.results.SimpleStatus;
 import by.bsu.smarttape.utils.results.UserRegistrationStatus;
 
 public class RegistrationService {
@@ -36,20 +39,17 @@ public class RegistrationService {
 
     private static FieldStatus checkPassword(String password) {
         if (password == null || password.length() < 8)
-            return new FieldStatus(false, "Поле не заполнено(минимум 8 символов)");
+            return new FieldStatus(false, "Имя пользователя должно содержать не менее 8 символов.");
         return new FieldStatus(true, "OK");
     }
 
     private static FieldStatus checkUserName(String userName) {
         if (userName == null || userName.length() < 6)
-            return new FieldStatus(false, "Поле не заполнено(минимум 6 символов)");
-        if (userNameCheckInDataBase(userName))
-            return new FieldStatus(false, "Имя пользователя уже занято.");
+            return new FieldStatus(false, "Имя пользователя должно содержать не менее 6 символов.");
+        boolean isUserNameAlreadyUsed = UserService.isUserNameRegistered(userName);
+        if (isUserNameAlreadyUsed)
+            return new FieldStatus(false, "Имя пользователя \'" + userName + "\' уже занято.");
         return new FieldStatus(true, "OK");
-    }
-
-    private static boolean userNameCheckInDataBase(String userName) {
-        return false;
     }
 
     private static FieldStatus checkEmail(String email) {
@@ -59,7 +59,19 @@ public class RegistrationService {
     }
 
     public static UserRegistrationStatus register(UserRegistrationForm registrationForm) {
-       return check(registrationForm.getEmail(), registrationForm.getUserName(), registrationForm.getPassword());
+       UserRegistrationStatus status = check(registrationForm.getEmail(), registrationForm.getUserName(), registrationForm.getPassword());
+       if (status.getStatus() == SimpleStatus.OK) {
+           UserService.SaveResult saveResult = UserService.saveNewUser(new User(registrationForm.getUserName(), registrationForm.getEmail(), registrationForm.getPassword()));
+           if (!saveResult.isSaved())
+               return UserRegistrationStatus.createStatus(
+                       SimpleStatus.ERROR,
+                       "Ошибка \'" + saveResult.getMessage() + "\'.",
+                       status.getLoginMessage(),
+                       status.getPasswordMessage(),
+                       status.getEmailMessage()
+               );
+       }
+       return status;
     }
 
 }

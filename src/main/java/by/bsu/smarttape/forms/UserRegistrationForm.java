@@ -9,7 +9,7 @@ public class UserRegistrationForm {
 
     private final static String USER_NAME = "user_name";
     private final static String PASSWORD = "password";
-    private final static String EMAIL = "password";
+    private final static String EMAIL = "email";
 
     private String userName;
     private String password;

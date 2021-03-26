@@ -4,7 +4,6 @@ import by.bsu.smarttape.models.User;
 import by.bsu.smarttape.utils.services.DataBaseSessionService;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -14,68 +13,60 @@ import java.util.List;
 
 public class UserService {
 
-    public static class UserServiceResult {
-        public static final int OK = 0;
-        public static final int EXCEPTION = 0;
-
-        private int code;
-        private Exception ex;
-        private Object result;
-
-        private UserServiceResult(int code, Exception ex, Object result) {
-            this.code = code;
-            this.ex = ex;
-            this.result = result;
-        }
-
-        public int getCode() {
-            return code;
-        }
-
-        public Exception getException() {
-            return ex;
-        }
-
-        public boolean isOk() {
-            return getCode() == OK;
-        }
-
-        public Object result() {
-            return result;
-        }
-
-    }
-
-    public static UserServiceResult isUserNameRegistered(String userName) {
+    private static boolean isFieldUniqInTable(String fieldName, String value) {
         try {
             Session userFindSession = DataBaseSessionService.getSession();
             CriteriaBuilder criteriaBuilder = userFindSession.getCriteriaBuilder();
 
             CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
             Root<User> userRoot = criteriaQuery.from(User.class);
-            criteriaQuery.select(userRoot).where(criteriaBuilder.equal(userRoot.get("userName"), userName));
+            criteriaQuery.select(userRoot).where(criteriaBuilder.equal(userRoot.get(fieldName), value));
 
             TypedQuery<User> query = userFindSession.createQuery(criteriaQuery);
             List<User> userList = query.getResultList();
 
             userFindSession.close();
-            return new UserServiceResult(UserServiceResult.OK, null, userList.size() > 0);
+            return userList.size() == 0;
         } catch (HibernateException ex) {
-            return new UserServiceResult(UserServiceResult.EXCEPTION, ex, null);
+            System.err.println(ex);
+            return false;
         }
     }
 
-    private static UserServiceResult saveNewUser(User user) {
-        final User[] savedUser = new User[1];
-        Exception exception = DataBaseSessionService.safetyOperation(session -> {
-            savedUser[0] = (User) session.save(user);
-            System.out.println("saved user id=" + savedUser[0].getId());
-        });
-        return new UserServiceResult(
-                exception == null ? UserServiceResult.OK : UserServiceResult.EXCEPTION,
-                exception,
-                exception == null ? savedUser[0] : null
-        );
+    public static boolean isUserNameRegistered(String userName) {
+        return !isFieldUniqInTable("userName", userName);
+    }
+
+    public static class SaveResult {
+        private final boolean saved;
+        private final String message;
+
+        private SaveResult(boolean isSaved, String message) {
+            this.message = message;
+            this.saved = isSaved;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public boolean isSaved() {
+            return saved;
+        }
+    }
+
+    public static SaveResult saveNewUser(User user) {
+        if (!isFieldUniqInTable("userName", user.getUserName()))
+            return new SaveResult(false, String.format("Имя пользователя \"%s\" уже используется.", user.getUserName()));
+
+        if (!isFieldUniqInTable("email", user.getEmail()))
+            return new SaveResult(false, String.format("Email \"%s\" уже используется.", user.getEmail()));
+
+        Exception exception = DataBaseSessionService.safetyOperation(session -> session.save(user));
+        if (exception != null)
+            return new SaveResult(false, String.format("Ошибка на стороне сервера: \"%s\".", exception.getMessage()));
+
+        return new SaveResult(true, "OK");
     }
 
 }

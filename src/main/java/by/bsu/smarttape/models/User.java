@@ -24,10 +24,6 @@ public class User implements Serializable {
 
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
@@ -35,7 +31,7 @@ public class User implements Serializable {
         return id;
     }
 
-    @Column(length = 30, updatable = true, unique = false, nullable = false)
+    @Column(length = 30, updatable = true, unique = true, nullable = false)
     public String getEmail() {
         return email;
     }
@@ -48,6 +44,10 @@ public class User implements Serializable {
     @Column(length = 30, updatable = true, unique = false, nullable = false)
     public String getPassword() {
         return password;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setEmail(String email) {
