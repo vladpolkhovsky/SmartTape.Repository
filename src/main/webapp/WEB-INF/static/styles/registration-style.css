@@ -10,6 +10,15 @@ body {
     min-width: 400px
 }
 
+.authorization-area {
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    min-width: 700px;
+    width: 80%;
+    max-height: 700px;
+}
+
 .block-header {
     font-family: 'Comfortaa', sans-serif;
 }
@@ -97,8 +106,7 @@ li {
     font-weight: bold;
 }
 
-.registration-form {
-    margin: auto;
+.form {
     width: 80%;
     max-width: 500px;
     min-width: 350px
@@ -109,9 +117,34 @@ li {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: white;
-    border-radius: 10px;
     padding: 0px 0px 20px 0px;
+}
+
+.background-white {
+    background-color: white;
+    width: 100%;
+    height: 400px;
+    max-width: 500px;
+    min-width: 350px
+}
+
+.in-line-buttons {
+    display: flex;
+    width: 300px;
+    justify-items: center;
+    justify-content: space-evenly;
+}
+
+.in-line-buttons a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    width: auto;
+    height: 50px;
+    font-family: 'Comfortaa', sans-serif;
+    color: blueviolet;
+    text-decoration: none;
 }
 
 .vertical-form input[type="email"], .vertical-form input[type="password"], .vertical-form input[type="text"]  {
@@ -136,8 +169,10 @@ li {
 .vertical-form input[type="submit"] {
     margin-top: 20px;
 
-    width: 280px;
-    height: 40px;
+    max-width: 300px;
+    min-width: 120px;
+    width: auto;
+    height: 50px;
 
     font-family: 'Comfortaa', sans-serif;
     font-size: 20px;

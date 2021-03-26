@@ -9,17 +9,34 @@
         <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
     </head>
     <body>
-        <div class="registration-form">
-            <h1 class="block-header tabbed">Регистарация</h1>
-            <form class="vertical-form" method="post" action="/registration-form" id="registration-form">
-                <input id="user-name" type="text" name="user_name" placeholder="Ваше имя" autocomplete="off" required />
-                <input id="email" type="email" name="email" placeholder="Ваш e-mail" autocomplete="on"  required />
-                <input id="password-1" type="password" name="password" placeholder="Пароль" autocomplete="off" required />
-                <input id="password-2" type="password" name="password" placeholder="Повторите пароль" autocomplete="off" required />
-                <span id="password-checker-span" class="password-checker"></span>
-                <input id="button-submit" class="st-button" type="submit" value="Зарегистрироваться" />
-            </form>
+        <div class="authorization-area">
+            <div class="login-form form">
+                <h1 class="block-header tabbed">Вход</h1>
+                <div class="background-white">
+                    <form class="vertical-form" method="post" action="/login" id="login-form">
+                        <input id="l-user-name" type="text" name="user_name" placeholder="E-mail" autocomplete="off" required />
+                        <input id="l-password" type="password" name="password" placeholder="Пароль" autocomplete="on" required />
+                        <div class="in-line-buttons">
+                            <a href="/reset-password">Забыли пароль</a>
+                            <input id="l-button-submit" class="st-button" type="submit" value="Войти" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="registration-form form">
+                <h1 class="block-header tabbed">Регистарация</h1>
+                <div class="background-white">
+                    <form class="vertical-form" method="post" action="/registration-form" id="registration-form">
+                        <input id="user-name" type="text" name="user_name" placeholder="Ваше имя" autocomplete="off" required />
+                        <input id="email" type="email" name="email" placeholder="Ваш e-mail" autocomplete="on"  required />
+                        <input id="password-1" type="password" name="password" placeholder="Пароль" autocomplete="off" required />
+                        <input id="password-2" type="password" name="password" placeholder="Повторите пароль" autocomplete="off" required />
+                        <span id="password-checker-span" class="password-checker"></span>
+                        <input id="button-submit" class="st-button" type="submit" value="Зарегистрироваться" />
+                    </form>
+                </div>
+            </div>
+            <script th:src="@{/static/scripts/reg-form-checker.js}"></script>
         </div>
-        <script th:src="@{/static/scripts/reg-form-checker.js}"></script>
     </body>
 </html>
