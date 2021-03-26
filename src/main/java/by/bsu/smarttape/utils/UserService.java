@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Optional;
 
 public class UserService {
 
@@ -67,6 +68,25 @@ public class UserService {
             return new SaveResult(false, String.format("Ошибка на стороне сервера: \"%s\".", exception.getMessage()));
 
         return new SaveResult(true, "OK");
+    }
+
+    public static User getUserByUserNameAndPassword(String userName, String password) {
+        try {
+            Session userFindSession = DataBaseSessionService.getSession();
+            CriteriaBuilder criteriaBuilder = userFindSession.getCriteriaBuilder();
+            CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+            Root<User> userRoot = criteriaQuery.from(User.class);
+            criteriaQuery.select(userRoot)
+                    .where(criteriaBuilder.equal(userRoot.get("userName"), userName))
+                    .where(criteriaBuilder.equal(userRoot.get("password"), password));
+            TypedQuery<User> query = userFindSession.createQuery(criteriaQuery);
+            List<User> userList = query.getResultList();
+            userFindSession.close();
+            return (userList.size() > 0 ? userList.get(0) : null);
+        } catch (HibernateException ex) {
+            System.err.println(ex);
+            return null;
+        }
     }
 
 }
