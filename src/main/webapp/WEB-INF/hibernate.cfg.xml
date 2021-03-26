@@ -1,0 +1,22 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+        <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
+        <property name="hibernate.connection.username">yafjewvi</property>
+        <property name="hibernate.connection.password">3vF4XUVlUWf4SR697PNyPnZpk9R7f1OR</property>
+        <property name="hibernate.connection.url">jdbc:postgresql://rogue.db.elephantsql.com:5432/yafjewvi</property>
+
+        <property name="connection_pool_size">2</property>
+
+        <property name="hbm2ddl.auto">update</property>
+
+        <property name="show_sql">true</property>
+
+        <mapping class="by.bsu.smarttape.models.User"/>
+
+    </session-factory>
+</hibernate-configuration>

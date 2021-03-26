@@ -15,19 +15,17 @@ public class RegistrationController {
 
     @PostMapping("/registration-form")
     public String register(Model model, HttpServletRequest request) {
-
         UserRegistrationStatusPresentation.of(
                 RegistrationService.register(
                         new UserRegistrationForm(request)
                 )
         ).updateModel(model);
-
-        return "registration/registrationStatus";
+        return "views/registration/registrationStatus";
     }
 
     @GetMapping("/registration-form")
     public String register() {
-        return "registration/registrationForm";
+        return "views/registration/registrationForm";
     }
 
 }
