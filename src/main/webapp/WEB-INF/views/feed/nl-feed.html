@@ -1,11 +1,26 @@
-<html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>Smart Tape feed</title>
-    </head>
-    <body>
-        <h1 style="font-family: 'Corbel Light'">Smart Tape</h1>
-        <h2><a href="/registration-form">Регистрация</a></h2>
-        <a href="/nl-feed">Очистить.</a>
-    </body>
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link th:href="@{/static/styles/registration-style.css}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+    <nav>
+        <div class="line-block">
+            <h1>УМНАЯ ЛЕНТА</h1>
+            <input type="text" placeholder="Поиск в Умной Ленте." autocomplete="off">
+        </div>
+        <div class="line-block">
+            <a class="st-login" th:href="${header.link}">
+                <span class="user-profile" th:utext="${header.caption}"/>
+            </a>
+        </div>
+    </nav>
+</header>
+</body>
 </html>

@@ -3,11 +3,10 @@ package by.bsu.smarttape.controllers;
 import by.bsu.smarttape.forms.UserRegistrationForm;
 import by.bsu.smarttape.models.User;
 import by.bsu.smarttape.utils.UserService;
+import by.bsu.smarttape.utils.presentation.HeaderModel;
 import by.bsu.smarttape.utils.presentation.UserRegistrationStatusPresentation;
 import by.bsu.smarttape.utils.services.ActiveSessionService;
 import by.bsu.smarttape.utils.services.RegistrationService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,16 +30,14 @@ public class RegistrationController {
     }
 
     @PostMapping("/login")
-    public RedirectView login(
+    public RedirectView login(Model model,
             HttpServletRequest request,
             @RequestParam(value = "user-name") String userName,
             @RequestParam(value = "password") String password
     ) {
         User user = UserService.getUserByUserNameAndPassword(userName, password);
-        if (user != null) {
+        if (user != null)
             ActiveSessionService.createOrUpdateSession(request.getSession(), user);
-            System.out.println(user.getId() + " logged.");
-        }
         return new RedirectView("/nl-feed");
     }
 
@@ -49,5 +46,10 @@ public class RegistrationController {
         return "views/registration/registrationForm";
     }
 
+    @GetMapping("/logout")
+    public RedirectView logout(HttpServletRequest request) {
+        ActiveSessionService.logout(request.getSession());
+        return new RedirectView("/nl-feed");
+    }
 
 }

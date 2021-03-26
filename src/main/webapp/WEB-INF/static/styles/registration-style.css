@@ -3,6 +3,81 @@ body {
     background-color: #F3F3F3;
 }
 
+nav {
+    display: flex;
+    justify-content: space-between;
+    justify-items: center;
+    background-color: blueviolet;
+    padding-left: 20px;
+}
+
+.line-block {
+    display: flex;
+    justify-content: space-evenly;
+    justify-items: center;
+    font-family: 'Comfortaa', sans-serif;
+    margin-right: 30px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+
+.line-block input[type="text"] {
+    font-family: 'Comfortaa', sans-serif;
+    margin-left: 20px;
+    min-width: 150px;
+    width: 300px;
+    max-width: 400px;
+    height: 30px;
+    padding-left: 20px;
+    border-radius: 15px;
+    margin-top: auto;
+    margin-bottom: auto;
+    outline: none;
+}
+
+.st-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 40px;
+    min-width: 150px;
+    width: auto;
+    max-width: 300px;
+
+    border-radius: 10px;
+    background-color: #ffffff;
+    color: black;
+
+    padding: auto auto;
+
+    font-family: 'Comfortaa', sans-serif;
+    text-decoration: none;
+    transition: all 1s;
+}
+
+.st-login:hover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: 40px + 10px;
+    min-width: 200px;
+    width: auto;
+    max-width: 300px;
+
+    border-radius: 10px;
+    background-color: #ffffff;
+    color: blueviolet;
+
+    padding: auto auto;
+
+    font-family: 'Comfortaa', sans-serif;
+    text-decoration: none;
+    transition: min-width 1s;
+}
+
 .status-area {
     margin: auto;
     width: 80%;
@@ -35,6 +110,9 @@ body {
     border-radius: 10px;
     padding: 10px 10px 10px 10px;
 }
+
+
+
 
 .ok-status {
     color: black;

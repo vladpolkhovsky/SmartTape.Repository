@@ -13,7 +13,7 @@
             <h1 class="block-header ok-status tabbed">Статус регистрация: OK</h1>
             <div class="status-description">
                 <p th:text="${status.getMessage()}"/>
-                <a class="st-button tabbed" href="/index.jsp">Войти</a>
+                <a class="st-button tabbed" href="/registration-form">Войти</a>
             </div>
         </div>
         <div class="status-area" th:if="${status.getStatus() == 1}">

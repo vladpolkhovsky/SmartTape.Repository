@@ -43,4 +43,9 @@ public class ActiveSessionService {
             activeSession.put(session.toString(), updateUser(user));
     }
 
+    public static void logout(HttpSession session) {
+        if (isActiveSession(session))
+            activeSession.remove(session.toString());
+    }
+
 }
