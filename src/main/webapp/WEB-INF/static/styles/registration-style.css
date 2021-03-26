@@ -78,6 +78,11 @@ body {
     text-decoration: none;
 }
 
+.st-button:visited:hover, .st-button:link:hover {
+    background-color: #400068;
+    transition: all 0.5s;
+}
+
 .error-status {
     color: red;
 }
