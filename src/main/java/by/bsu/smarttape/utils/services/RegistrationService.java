@@ -57,6 +57,12 @@ public class RegistrationService {
         return new FieldStatus(true, "OK");
     }
 
+    /**
+     * Регистрация пользователя.
+     * @param registrationForm - объект формы регистрации пользователя
+     * @return статус регистрации с инфорамацией об ошибке или успехе.
+     */
+
     public static UserRegistrationStatus register(UserRegistrationForm registrationForm) {
        UserRegistrationStatus status = check(registrationForm.getEmail(), registrationForm.getUserName(), registrationForm.getPassword());
        if (status.getStatus() == SimpleStatus.OK) {

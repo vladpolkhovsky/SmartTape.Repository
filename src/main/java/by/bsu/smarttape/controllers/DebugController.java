@@ -50,12 +50,6 @@ public class DebugController {
         }
     }
 
-    public static String calcTime(long a, long b) {
-        System.out.println(a + " " + b);
-        double min = (Double.valueOf(a) - Double.valueOf(b)) / 60000;
-        return String.format("online %4.2f min", min);
-    }
-
     @GetMapping("/sessions")
     public String getSessions(Model model) {;
         List<SessionInfo> infoList = new ArrayList<>();

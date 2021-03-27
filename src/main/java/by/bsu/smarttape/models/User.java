@@ -15,9 +15,6 @@ public class User implements Serializable {
     private String userName;
     private String password;
 
-    @Transient
-    private transient long sessionStart;
-
     public User(String userName, String email, String password) {
         this.userName = userName;
         this.email = email;
@@ -64,16 +61,6 @@ public class User implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    @Transient
-    public void setSessionStart(long sessionStart) {
-        this.sessionStart = sessionStart;
-    }
-
-    @Transient
-    public long getSessionStart() {
-        return sessionStart;
     }
 
     @Override

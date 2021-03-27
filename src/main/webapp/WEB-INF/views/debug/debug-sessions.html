@@ -18,7 +18,7 @@
             <ul>
                 <li th:utext="|${item.user.id}| + ' - id'" />
                 <li th:utext="|${item.user.userName}| + ' - username'"/>
-                <li th:utext="'time: ' + ${T(by.bsu.smarttape.controllers.DebugController).calcTime(nowtime, item.user.sessionStart)}" />
+                <li th:utext="'time: ' + ${T(by.bsu.smarttape.utils.services.ActiveSessionService).calcTime(item.user)}" />
             </ul>
         </td>
     </tr>

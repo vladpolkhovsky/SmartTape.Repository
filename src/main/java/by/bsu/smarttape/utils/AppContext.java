@@ -14,8 +14,6 @@ public class AppContext {
 
     private static ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("applicationContextMVC.xml");
 
-    ArrayList arrayList = new ArrayList<String>();
-
     /**
      * Singleton метод. Получение контекста.
      * @return ClassPathXmlApplicationContext - context
@@ -23,16 +21,6 @@ public class AppContext {
 
     public static ClassPathXmlApplicationContext getContext() {
         return context;
-    }
-
-    /**
-     *
-     * @param name -
-     * @return
-     */
-
-    public static Object getBean(String name) {
-        return context.getBean(name);
     }
 
 }

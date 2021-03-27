@@ -1,7 +1,6 @@
 package by.bsu.smarttape.utils.services;
 
 import by.bsu.smarttape.models.User;
-import by.bsu.smarttape.utils.services.DataBaseSessionService;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -33,9 +32,19 @@ public class UserService {
         }
     }
 
+    /**
+     * Проверка на уникальность имени пользователя.
+     * @param userName имя пользоваетеля.
+     * @return <code>true</code> если <code>User</code> с таким именем пользователя содержится в БД.
+     */
+
     public static boolean isUserNameRegistered(String userName) {
         return !isFieldUniqInTable("userName", userName);
     }
+
+    /**
+     * Результат работы сервиса.
+     */
 
     public static class SaveResult {
         private final boolean saved;
@@ -55,6 +64,12 @@ public class UserService {
         }
     }
 
+    /**
+     * Сохранение в БД.
+     * @param user - пользователь, который будет сохранён в БД.
+     * @return SaveResult, <code>.isSaved() == true</code> если сохранение прошло успешно. Иначе <code>SaveResult.getMessage</code> содержит информацию об ошибке.
+     */
+
     public static SaveResult saveNewUser(User user) {
         if (!isFieldUniqInTable("userName", user.getUserName()))
             return new SaveResult(false, String.format("Имя пользователя \"%s\" уже используется.", user.getUserName()));
@@ -68,6 +83,13 @@ public class UserService {
 
         return new SaveResult(true, "OK");
     }
+
+    /**
+     * Поиск учётной записи в БД.
+     * @param userName имя пользователя
+     * @param password пароль пользователя
+     * @return объект <code>User</code>, если учётная запись существует. иначе <code>null</code>.
+     */
 
     public static User getUserByUserNameAndPassword(String userName, String password) {
         try {
