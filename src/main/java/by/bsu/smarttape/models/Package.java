@@ -1,9 +1,8 @@
 package by.bsu.smarttape.models;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Package {
     private String packageName;
-    private ArrayList<Link> links;
-
+    private List<Link> links;
 }

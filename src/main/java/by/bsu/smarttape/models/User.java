@@ -16,9 +16,6 @@ public class User implements Serializable {
     private String userName;
     private String password;
 
-    private Package userPackage;// Сохраненные пользователем ссылки
-    private Package userLinksPackage;// ссылки на страницы пользлвателя
-
     @Transient
     private transient long sessionStart;
 
