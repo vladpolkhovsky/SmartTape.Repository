@@ -21,6 +21,9 @@ nav {
     margin-bottom: auto;
 }
 
+.no-decoration, .no-decoration:visited, .no-decoration:link {
+    text-decoration: none;
+}
 
 .line-block input[type="text"] {
     font-family: 'Comfortaa', sans-serif;

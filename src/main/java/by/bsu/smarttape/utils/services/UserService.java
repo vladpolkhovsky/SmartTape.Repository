@@ -1,4 +1,4 @@
-package by.bsu.smarttape.utils;
+package by.bsu.smarttape.utils.services;
 
 import by.bsu.smarttape.models.User;
 import by.bsu.smarttape.utils.services.DataBaseSessionService;
@@ -10,7 +10,6 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
-import java.util.Optional;
 
 public class UserService {
 

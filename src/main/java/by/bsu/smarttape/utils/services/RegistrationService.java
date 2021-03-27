@@ -2,7 +2,6 @@ package by.bsu.smarttape.utils.services;
 
 import by.bsu.smarttape.forms.UserRegistrationForm;
 import by.bsu.smarttape.models.User;
-import by.bsu.smarttape.utils.UserService;
 import by.bsu.smarttape.utils.results.SimpleStatus;
 import by.bsu.smarttape.utils.results.UserRegistrationStatus;
 

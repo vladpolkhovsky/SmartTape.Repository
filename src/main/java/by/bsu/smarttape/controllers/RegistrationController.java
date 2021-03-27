@@ -2,8 +2,7 @@ package by.bsu.smarttape.controllers;
 
 import by.bsu.smarttape.forms.UserRegistrationForm;
 import by.bsu.smarttape.models.User;
-import by.bsu.smarttape.utils.UserService;
-import by.bsu.smarttape.utils.presentation.HeaderModel;
+import by.bsu.smarttape.utils.services.UserService;
 import by.bsu.smarttape.utils.presentation.UserRegistrationStatusPresentation;
 import by.bsu.smarttape.utils.services.ActiveSessionService;
 import by.bsu.smarttape.utils.services.RegistrationService;
@@ -42,7 +41,8 @@ public class RegistrationController {
     }
 
     @GetMapping("/registration-form")
-    public String register() {
+    public String register(Model model) {
+        model.addAttribute("disable", true);
         return "views/registration/registrationForm";
     }
 

@@ -1,6 +1,6 @@
 package by.bsu.smarttape.controllers;
 
-import by.bsu.smarttape.utils.UserService;
+import by.bsu.smarttape.utils.services.UserService;
 import com.google.gson.JsonObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;

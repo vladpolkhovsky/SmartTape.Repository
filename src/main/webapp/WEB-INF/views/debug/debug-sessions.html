@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>debug</title>
+</head>
+<body>
+<table th:width="'100%'" style="border: 1px solid black">
+    <tbody>
+    <caption th:text="'Активные сессии. servertime=' + |${nowtime}|" />
+    <tr style="text-align: center">
+        <td>Session</td>
+        <td>User</td>
+    </tr>
+    <tr style="border-bottom: 1px solid black" th:each="item : ${items}">
+        <td th:text="${item.session}" />
+        <td>
+            <ul>
+                <li th:utext="|${item.user.id}| + ' - id'" />
+                <li th:utext="|${item.user.userName}| + ' - username'"/>
+                <li th:utext="'time: ' + ${T(by.bsu.smarttape.controllers.DebugController).calcTime(nowtime, item.user.sessionStart)}" />
+            </ul>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

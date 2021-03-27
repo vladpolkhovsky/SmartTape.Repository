@@ -5,12 +5,24 @@ import by.bsu.smarttape.models.User;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class ActiveSessionService {
 
     private static final long SESSION_LIVE_TIME = 900000;
 
     private static final Map<String, User> activeSession = new HashMap<>();
+
+
+    //debug
+    public static Set<String> getSessions() {
+        return activeSession.keySet();
+    }
+
+    //debug
+    public static User getUserByString(String session) {
+        return activeSession.get(session);
+    }
 
     public static void checkSessionLiveTime(HttpSession session) {
         if (activeSession.get(session.toString()) != null) {
