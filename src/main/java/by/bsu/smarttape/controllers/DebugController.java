@@ -40,16 +40,6 @@ public class DebugController {
         }
     }
 
-    private class SessionInfoWrapper {
-        private List<SessionInfo> infoList;
-        public List<SessionInfo> getInfoList() {
-            return infoList;
-        }
-        public SessionInfoWrapper(List<SessionInfo> infoList) {
-            this.infoList = infoList;
-        }
-    }
-
     @GetMapping("/sessions")
     public String getSessions(Model model) {;
         List<SessionInfo> infoList = new ArrayList<>();

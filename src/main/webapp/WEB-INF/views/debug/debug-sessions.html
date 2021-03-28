@@ -5,20 +5,20 @@
     <title>debug</title>
 </head>
 <body>
-<table th:width="'100%'" style="border: 1px solid black">
+<table th:style="'margin: 0 auto; min-width:400px'" th:width="'40%'">
     <tbody>
     <caption th:text="'Активные сессии. servertime=' + |${nowtime}|" />
     <tr style="text-align: center">
-        <td>Session</td>
-        <td>User</td>
+        <td style="border-bottom: 1px solid black" th:width="'10%'">Session</td>
+        <td style="border-bottom: 1px solid black" th:width="'30%'">User</td>
     </tr>
-    <tr style="border-bottom: 1px solid black" th:each="item : ${items}">
-        <td th:text="${item.session}" />
-        <td>
+    <tr th:each="item : ${items}">
+        <td style="border-bottom: 1px solid black; border-right: 1px solid black; text-align: center" th:width="'10%'" th:text="${item.session}" />
+        <td style="border-bottom: 1px solid black" th:width="'30%'">
             <ul>
                 <li th:utext="|${item.user.id}| + ' - id'" />
                 <li th:utext="|${item.user.userName}| + ' - username'"/>
-                <li th:utext="'time: ' + ${T(by.bsu.smarttape.utils.services.ActiveSessionService).calcTime(item.user)}" />
+                <li th:utext="'time: ' + ${T(by.bsu.smarttape.utils.services.ActiveSessionService).calcTime(item.session)}" />
             </ul>
         </td>
     </tr>
