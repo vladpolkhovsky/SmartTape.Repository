@@ -3,14 +3,6 @@ body {
     background-color: #F3F3F3;
 }
 
-nav {
-    display: flex;
-    justify-content: space-between;
-    justify-items: center;
-    background-color: blueviolet;
-    padding-left: 20px;
-}
-
 .line-block {
     display: flex;
     justify-content: space-evenly;

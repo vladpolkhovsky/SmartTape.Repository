@@ -14,13 +14,7 @@ public class FeedController {
     @GetMapping("/nl-feed")
     public String feed(Model model, HttpServletRequest request) {
         User user = ActiveSessionService.getUserBySession(request.getSession());
-        HeaderModel header;
-        if (user != null) {
-            ActiveSessionService.createOrUpdateSession(request.getSession(), user);
-            header = new HeaderModel("/logout", user.getUserName());
-        } else {
-            header = new HeaderModel("/registration-form", "ВХОД");
-        }
+        HeaderModel header = HeaderModel.getInstance(user, true);
         model.addAttribute("header", header);
         return "views/feed/nl-feed";
     }

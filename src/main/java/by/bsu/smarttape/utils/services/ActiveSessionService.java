@@ -135,6 +135,8 @@ public class ActiveSessionService {
         isWorking = true;
         checkSessionLiveTime(session);
         User user = Optional.ofNullable(activeSession.get(getShortHash(session))).orElse(nullWrapper).getUser();
+        if (user != null)
+            createOrUpdateSession(session, user, false);
         isWorking = false;
         return user;
     }
@@ -155,8 +157,8 @@ public class ActiveSessionService {
      * @param user закреплённый за этой сессией пользователь.
      */
 
-    public static void createOrUpdateSession(HttpSession session, User user) {
-        while (isLocked || isWorking);
+    private static void createOrUpdateSession(HttpSession session, User user, boolean checkWork) {
+        while (isLocked || (checkWork && isWorking));
         isWorking = true;
         checkSessionLiveTime(session);
         if (isActiveSession(session))
@@ -164,6 +166,10 @@ public class ActiveSessionService {
         else
             activeSession.put(getShortHash(session), putUser(user));
         isWorking = false;
+    }
+
+    public static void createOrUpdateSession(HttpSession session, User user) {
+       createOrUpdateSession(session, user, true);
     }
 
     /**

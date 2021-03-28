@@ -1,0 +1,236 @@
+body {
+    margin: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+
+    height: 60px;
+    background-color: blueviolet;
+
+    min-width: 950px;
+
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.center {
+    margin: auto 0 auto 10px;
+}
+
+.logo {
+    display: flex;
+
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+
+    font-family: 'Comfortaa', sans-serif;
+
+    font-size: 1.5em;
+
+    height: 100%;
+    width: 200px;
+}
+
+.logo a {
+    color: black;
+    text-decoration: none;
+}
+
+.header-main {
+    display: flex;
+    margin: 0;
+}
+
+.search-line {
+    width: 250px;
+    height: 30px;
+    border-radius: 15px;
+
+    padding-left: 40px;
+
+    border: none;
+    font-family: 'Comfortaa', sans-serif;
+
+    background-image: url("https://www.w3schools.com/css/searchicon.png");
+    background-repeat: no-repeat;
+    background-position: 8px 6px;
+
+    transition: all 0.3s;
+}
+
+.search-line:focus {
+    outline: none;
+
+    background-position: -40px 6px;
+    padding-left: 15px;
+
+    font-size: medium;
+
+    width: 275px;
+
+    transition: all 1s;
+}
+
+.buttons-area {
+    display: flex;
+    justify-content: space-evenly;
+    justify-items: center;
+}
+
+.button {
+    font-family: 'Comfortaa', sans-serif;
+    color: #bc96e6;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.button h2 a {
+    text-align: center;
+    color: #bc96e6;
+    text-decoration: none;
+}
+
+.active h2 a {
+    color: white;
+}
+
+.header-user-area {
+
+    position: relative;
+    display: block;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    min-width: 200px;
+    height: 100%;
+
+}
+
+.functional-button {
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    font-family: 'Comfortaa', sans-serif;
+
+    width: auto;
+    min-width: 150px;
+    max-width: 200px;
+
+    border-radius: 20px;
+
+    height: 40px;
+
+    text-align: center;
+    background-color: white;
+
+    margin: auto;
+
+    transition: all 0.7s;
+}
+
+.login-button {
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+}
+
+.login-button img {
+    display: block;
+
+    margin-left: 5px;
+    margin-top: auto;
+    margin-bottom: auto;
+
+    width: 15px;
+    height: 15px;
+}
+
+.functional-button:hover .login-button img {
+    display: block;
+
+    margin-left: 15px;
+    margin-top: auto;
+    margin-bottom: auto;
+
+    width: 15px;
+    height: 15px;
+
+    transition: all 1s;
+}
+
+.functional-button:link {
+    color: black;
+    text-decoration: none;
+}
+
+.left-border {
+    border-left: 2px black solid;
+    margin-left: 10px;
+}
+
+.click-options {
+
+    position: absolute;
+
+    z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    visibility: hidden;
+
+    justify-content: flex-end;
+
+    top: 0;
+    width: 150px;
+    right: 25px;
+
+    height: 120px;
+
+    font-family: 'Comfortaa', sans-serif;
+
+    font-size: large;
+}
+
+.header-user-area:hover .click-options {
+    visibility: visible;
+}
+
+.click-options a {
+    margin-left: 10px;
+    transition: 0.2s;
+}
+
+.click-options a:link {
+    text-decoration: solid;
+    color: black;
+}
+
+.click-options a:hover {
+    margin-left: 20px;
+    font-size: larger;
+    transition: all 0.4s;
+}
+
+#options-area {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 2;
+    width: 300px;
+    height: 400px;
+}

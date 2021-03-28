@@ -14,7 +14,7 @@ import java.io.IOException;
 
 @Controller
 @RequestMapping(value = "/api")
-public class Api {
+public class ApiController {
 
     @GetMapping(value = "/user-name-checker", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> checkUserNameForUniq(@RequestParam("user-name") String userName) throws IOException {

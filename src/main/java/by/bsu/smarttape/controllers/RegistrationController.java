@@ -2,6 +2,7 @@ package by.bsu.smarttape.controllers;
 
 import by.bsu.smarttape.forms.UserRegistrationForm;
 import by.bsu.smarttape.models.User;
+import by.bsu.smarttape.utils.presentation.HeaderModel;
 import by.bsu.smarttape.utils.services.UserService;
 import by.bsu.smarttape.utils.presentation.UserRegistrationStatusPresentation;
 import by.bsu.smarttape.utils.services.ActiveSessionService;
@@ -34,6 +35,7 @@ public class RegistrationController {
             @RequestParam(value = "user-name") String userName,
             @RequestParam(value = "password") String password
     ) {
+        ActiveSessionService.logout(request.getSession());
         User user = UserService.getUserByUserNameAndPassword(userName, password);
         if (user != null)
             ActiveSessionService.createOrUpdateSession(request.getSession(), user);
@@ -42,7 +44,8 @@ public class RegistrationController {
 
     @GetMapping("/registration-form")
     public String register(Model model) {
-        model.addAttribute("disable", true);
+        HeaderModel header = HeaderModel.getInstance(null, false);
+        model.addAttribute("header", header);
         return "views/registration/registrationForm";
     }
 
