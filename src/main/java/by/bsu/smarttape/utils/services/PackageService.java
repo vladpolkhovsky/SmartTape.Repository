@@ -5,6 +5,7 @@ import by.bsu.smarttape.utils.results.PackageStatus;
 
 public interface PackageService {
     PackageStatus getPackage(long id);
-    PackageStatus setPackage(long id);
+    PackageStatus savePackage(long id);
     PackageStatus deletePackage(long id);
+    PackageStatus subPackage(long packageID, long userID);
 }
