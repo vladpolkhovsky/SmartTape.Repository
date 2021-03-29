@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Регистрация</title>
+        <link th:href="@{/static/styles/registration-style.css}" rel="stylesheet">
+        <link th:href="@{/static/styles/feed-style.css}" rel="stylesheet">
+        <link th:href="@{/static/styles/profile-style.css}" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
+    </head>
+    <body>
+        <header>
+            <div class="header-main">
+                <h1 class="logo center"><a href="/nl-feed">УМНАЯ ЛЕНТА</a></h1>
+                <input autofocus th:if="${header.isShowNav()}" id="search" class="search-line center" type="text" autocomplete="off" onfocus="searchLineWords()" onblur="killLineWords()" placeholder="Поиск в Умной Ленте">
+                <nav th:if="${header.isShowNav()}" class="buttons-area" th:each="button: ${header.getButtons()}">
+                    <div class="button" th:classappend="${button.isActive() == true ? 'active' : ''}">
+                        <h2><a th:href="${button.getLink()}" th:text="${button.getName()}" /></h2>
+                    </div>
+                </nav>
+            </div>
+            <div th:if="${header.isShowNav()}" class="header-user-area">
+                <a th:if="${header.isEntered()}" class="functional-button" th:text="${header.getUser().getUserName()}">
+                    vlad.polkhovsky
+                </a>
+                <div th:if="${header.isEntered()}" class="click-options">
+                    <div class="left-border">
+                        <a class="click-option" href="/settings">Настройки</a>
+                        <a class="click-option" href="/logout">Выход</a>
+                    </div>
+                </div>
+                <a th:if="${!header.isEntered()}" class="functional-button" href="/registration-form">
+                    <span class="login-button">
+                        ВХОД
+                        <img src="https://www.vseprosport.ru/images/user/default.png" />
+                    </span>
+                </a>
+            </div>
+        </header>
+        <div class="profile-setttings" th:if="${header.getUser() != null}">
+            <h1 class="block-header tabbed">
+                Редактирование профиля
+            </h1>
+            <div class="background-white-settings">
+                <form id="update-profile" method="POST" name="update-profile">
+                    <div class="settings-blocks">
+                        <div class="settings-names settings-block">
+                            <section class="setting-user-name settings-item">
+                                <h2>Изменить имя:</h2>
+                                <p class="error" th:if="${status != null && status.getUserNameStatus() != null}" th:text="${status.getUserNameStatus()}" />
+                            </section>
+                            <section class="setting-password settings-item">
+                                <h2>Изменить пароль:</h2>
+                                <p class="error" th:if="${status != null && status.getPasswordStatus() != null}" th:text="${status.getPasswordStatus()}" />
+                            </section>
+                            <section class="setting-email settings-item">
+                                <h2>Изменить e-mail:</h2>
+                                <p class="error" th:if="${status != null && status.getEmailStatus() != null}" th:text="${status.getEmailStatus()}" />
+                            </section>
+                            <p class="ok" th:if="${status != null && status.isOk()}" th:text="'Сохранение прошло успешно'" />
+                        </div>
+                        <div class="settings-input settings-block">
+                            <section class="setting-user-name settings-item">
+                                <input autocomplete="off" type="text" name="user-name" th:placeholder="${header.getUser().getUserName()}" />
+                            </section>
+                            <section class="setting-password settings-item">
+                                <input autocomplete="off" type="password" name="password-old" placeholder="Старый пароль" />
+                                <input autocomplete="new-password" type="password" name="password-new-1" placeholder="Новый пароль" />
+                                <input autocomplete="new-password" type="password" name="password-new-2" placeholder="Новый пароль" />
+                            </section>
+                            <section class="setting-email settings-item">
+                                <input autocomplete="off" type="email" name="email" placeholder="Новый e-mail">
+                            </section>
+                        </div>
+                    </div>
+                    <input type="submit" value="Сохранить" />
+                </form>
+            </div>
+        </div>
+        <div class="error-message" th:if="${header.getUser() == null}">
+            <h1 class="tabbed">Ошибка доступа &#128534;</h1>
+            <div class="background-white-error">
+                <p>
+                    Время сессии истекло.
+                </p>
+                <a class="st-button" href="/registration-form">Войти</a>
+            </div>
+        </div>
+    </body>
+</html>

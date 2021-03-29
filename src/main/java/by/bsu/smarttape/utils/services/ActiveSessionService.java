@@ -10,7 +10,7 @@ import java.util.*;
 
 public class ActiveSessionService {
 
-    private static final long SESSION_LIVE_TIME = 900000 / 15 / 3;
+    private static final long SESSION_LIVE_TIME = 900000;
 
     private static final Map<String, UserSessionWrapper> activeSession = initService();
 

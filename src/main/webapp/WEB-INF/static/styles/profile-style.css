@@ -1,0 +1,120 @@
+.profile-setttings {
+    min-width: 600px;
+    width: 90%;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.profile-setttings h1 {
+    width: 500px;
+}
+
+.background-white-settings {
+    background-color: white;
+    min-width: 600px;
+    width: 90%;
+    max-width: 700px;
+}
+
+.settings-blocks {
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+}
+
+.settings-block {
+    margin: 0;
+    margin-top: 20px;
+    width: 50%;
+}
+
+.settings-item {
+    font-family: 'Comfortaa', sans-serif;
+    margin-left: 40px;
+}
+
+.settings-item h2 {
+    margin: 0;
+}
+
+.settings-item input {
+
+    font-family: 'Comfortaa', sans-serif;
+
+    width: 200px;
+    height: 30px;
+    margin-bottom: 10px;
+    padding-left: 20px;
+
+    border: 2px lightgray solid;
+    border-radius: 10px;
+
+
+    outline: none;}
+
+.setting-user-name {
+    margin-top: 20px;
+    height: 100px;
+}
+
+.setting-password {
+    margin-top: 20px;
+    height: 230px;
+}
+
+.setting-email {
+    margin-top: 20px;
+    height: 50px;
+}
+
+#update-profile input[type="submit"] {
+    font-family: 'Comfortaa', sans-serif;
+    height: 40px;
+    width: 120px;
+    margin: 20px 25% 20px 75%;
+    font-size: medium;
+    background-color: white;
+    border: 2px blueviolet solid;
+    border-radius: 10px;
+    transition: all 1s;
+}
+
+#update-profile input[type="submit"]:hover {
+    font-family: 'Comfortaa', sans-serif;
+    height: 40px;
+    width: 120px;
+    margin: 20px 25% 20px 75%;
+    background-color: blueviolet;
+    border: 2px blueviolet solid;
+    border-radius: 10px;
+    transition: all 1s;
+}
+
+.error-message {
+    width: 500px;
+
+    font-family: 'Comfortaa', sans-serif;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+.background-white-error {
+    background-color: white;
+    padding: 10px 10px 10px 10px;
+}
+
+.error {
+    color: red;
+    font-size: small;
+}
+
+.ok {
+    color: green;
+    font-family: 'Comfortaa', sans-serif;
+    text-align: center;
+    font-size: medium;
+    text-align: center;
+}

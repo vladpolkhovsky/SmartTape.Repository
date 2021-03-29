@@ -12,7 +12,7 @@
     <header>
         <div class="header-main">
             <h1 class="logo center"><a href="/nl-feed">УМНАЯ ЛЕНТА</a></h1>
-            <input th:if="${header.isShowNav()}" id="search" class="search-line center" type="text" autocomplete="off" onfocus="searchLineWords()" onblur="killLineWords()" placeholder="Поиск в Умной Ленте">
+            <input autofocus th:if="${header.isShowNav()}" id="search" class="search-line center" type="text" autocomplete="off" onfocus="searchLineWords()" onblur="killLineWords()" placeholder="Поиск в Умной Ленте">
             <nav th:if="${header.isShowNav()}" class="buttons-area" th:each="button: ${header.getButtons()}">
                 <div class="button" th:classappend="${button.isActive() == true ? 'active' : ''}">
                     <h2><a th:href="${button.getLink()}" th:text="${button.getName()}" /></h2>
@@ -27,7 +27,7 @@
 
             <div th:if="${header.isEntered()}" class="click-options">
                 <div class="left-border">
-                    <a class="click-option" href="/settings">Настройки</a>
+                    <a class="click-option" href="/control-panel/profile-settings">Настройки</a>
                     <a class="click-option" href="/logout">Выход</a>
                 </div>
             </div>

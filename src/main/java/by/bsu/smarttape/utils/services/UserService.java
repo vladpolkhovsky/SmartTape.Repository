@@ -1,6 +1,9 @@
 package by.bsu.smarttape.utils.services;
 
+import by.bsu.smarttape.forms.UserUpdateForm;
 import by.bsu.smarttape.models.User;
+import by.bsu.smarttape.utils.results.UserRegistrationStatus;
+import by.bsu.smarttape.utils.results.UserUpdateStatus;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -8,6 +11,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public class UserService {
@@ -32,6 +36,73 @@ public class UserService {
         }
     }
 
+
+    public static UserUpdateStatus UpdateUser(HttpServletRequest request, UserUpdateForm updateForm) {
+
+        String userNameMessage = null;
+        String passwordMessage = null;
+        String emailMessage = null;
+
+        User user = ActiveSessionService.getUserBySession(request.getSession());
+        System.out.println(request.getSession());
+
+        if (user == null) {
+            return new UserUpdateStatus(null, null, null);
+        }
+
+        if (updateForm.getUserName() != null) {
+            if (
+                !updateForm.getUserName().equals(user.getUserName()) &&
+                UserService.isUserNameRegistered(updateForm.getUserName())
+            )
+                userNameMessage = "Имя пользователя уже занято.";
+            else if (updateForm.getUserName().length() < 6)
+                userNameMessage = "Имя пользователя должно содержать не менее 6 символов.";
+        }
+
+        if (updateForm.getPasswordOld() != null || updateForm.getPasswordNew1() != null || updateForm.getPasswordNew2() != null) {
+            if (updateForm.getPasswordOld() == null)
+                passwordMessage = "Укажите старый пароль.";
+            else if (!updateForm.getPasswordOld().equals(user.getPassword()))
+                passwordMessage = "Неправильный пароль.";
+            else if (
+                    (updateForm.getPasswordNew1() != null && !updateForm.getPasswordNew1().equals(updateForm.getPasswordNew2())) ||
+                    (updateForm.getPasswordNew2() != null && !updateForm.getPasswordNew2().equals(updateForm.getPasswordNew1()))
+            )
+                passwordMessage = "Пароли не совпадают.";
+            else if (updateForm.getPasswordNew1() == null && updateForm.getPasswordNew2() == null)
+                passwordMessage = "Не указан новый пароль.";
+            else if (updateForm.getPasswordNew1().length() < 8 && updateForm.getPasswordNew2().length() < 8)
+                passwordMessage = "Пароль должен содержать не менее 8 символов.";
+        }
+
+        if (
+                updateForm.getEmail() != null &&
+                !updateForm.getEmail().equals(user.getEmail()) &&
+                UserService.isEmailRegistered(updateForm.getEmail())
+        )
+            emailMessage = "Email уже занят.";
+
+        if (userNameMessage == null && passwordMessage == null && emailMessage == null) {
+            Exception exception = DataBaseSessionService.safetyOperation(session -> {
+                session.evict(user);
+                if (updateForm.getUserName() != null)
+                    user.setUserName(updateForm.getUserName());
+                if (updateForm.getPasswordNew1() != null)
+                    user.setPassword(updateForm.getPasswordNew1());
+                if (updateForm.getEmail() != null)
+                    user.setEmail(updateForm.getEmail());
+                session.update(user);
+            });
+            if (exception != null)
+                return new UserUpdateStatus(null, null, "EXCEPTION: " + exception.getMessage());
+            ActiveSessionService.logout(request.getSession());
+            ActiveSessionService.createOrUpdateSession(request.getSession(), user);
+        }
+
+        return new UserUpdateStatus(userNameMessage, passwordMessage, emailMessage);
+    }
+
     /**
      * Проверка на уникальность имени пользователя.
      * @param userName имя пользоваетеля.
@@ -40,6 +111,10 @@ public class UserService {
 
     public static boolean isUserNameRegistered(String userName) {
         return !isFieldUniqInTable("userName", userName);
+    }
+
+    public static boolean isEmailRegistered(String email) {
+        return !isFieldUniqInTable("email", email);
     }
 
     /**

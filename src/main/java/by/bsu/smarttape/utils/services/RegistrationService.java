@@ -25,7 +25,7 @@ public class RegistrationService {
         }
     }
 
-    private static UserRegistrationStatus check(String email, String userName, String password) {
+    public static UserRegistrationStatus check(String email, String userName, String password) {
         FieldStatus emailStatus = checkEmail(email);
         FieldStatus userNameStatus = checkUserName(userName);
         FieldStatus passwordStatus = checkPassword(password);

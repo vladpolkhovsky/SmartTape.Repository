@@ -10,14 +10,14 @@
     </head>
     <body>
         <div class="status-area" th:if="${status.getStatus() == 0}">
-            <h1 class="block-header ok-status tabbed">Статус регистрация: OK</h1>
+            <h1 class="block-header ok-status tabbed">Регистрация прошла успешно &#128175;</h1>
             <div class="status-description">
                 <p th:text="${status.getMessage()}"/>
                 <a class="st-button tabbed" href="/registration-form">Войти</a>
             </div>
         </div>
         <div class="status-area" th:if="${status.getStatus() == 1}">
-            <h1 class="block-header error-status tabbed">Статус регистрация: Error</h1>
+            <h1 class="block-header error-status tabbed">Ошибка регистрации &#128543;</h1>
             <div class="status-description">
                 <p th:text="${status.getMessage()}"/>
                 <ul>
