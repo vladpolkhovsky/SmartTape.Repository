@@ -17,6 +17,8 @@
         <property name="show_sql">true</property>
 
         <mapping class="by.bsu.smarttape.models.User"/>
+        <mapping class="by.bsu.smarttape.models.Package"/>
+        <mapping class="by.bsu.smarttape.models.Link"/>
 
     </session-factory>
 </hibernate-configuration>

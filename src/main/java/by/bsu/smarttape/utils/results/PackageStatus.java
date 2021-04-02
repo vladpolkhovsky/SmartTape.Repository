@@ -1,6 +1,5 @@
 package by.bsu.smarttape.utils.results;
 
-import by.bsu.smarttape.models.Link;
 import by.bsu.smarttape.models.Package;
 
 public class PackageStatus implements SimpleStatus {
@@ -34,7 +33,7 @@ public class PackageStatus implements SimpleStatus {
         return code;
     }
 
-    public Package getaPackage() {
+    public Package getPackage() {
         return aPackage;
     }
 }

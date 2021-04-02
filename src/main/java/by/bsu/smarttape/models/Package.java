@@ -1,44 +1,50 @@
 package by.bsu.smarttape.models;
 
-import by.bsu.smarttape.utils.results.PackageStatus;
-import by.bsu.smarttape.utils.services.PackageService;
+import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.*;
 import java.util.List;
 
-public class Package implements PackageService {
-    private int id;
-    private List<Link> links;
-    private int ownerID;
+@Entity
+@Table(name = "smart_tape_package")
+public class Package {
+    private long id;
 
-    public int getId() {
+    private transient List<Link> links;
+
+    private long ownerID;
+
+    public Package(List<Link> links, long ownerID) {
+        this.links = links;
+        this.ownerID = ownerID;
+    }
+
+    public Package() {
+
+    }
+
+    @Id
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
+    public long getId() {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Transient
     public List<Link> getLinks() {
         return links;
     }
 
-    public int getOwnerID() {
+    @Column
+    public long getOwnerID() {
         return ownerID;
     }
 
-    @Override
-    public PackageStatus getPackage(long id) {
-        return null;
-    }
-
-    @Override
-    public PackageStatus savePackage(long id) {
-        return null;
-    }
-
-    @Override
-    public PackageStatus deletePackage(long id) {
-        return null;
-    }
-
-    @Override
-    public PackageStatus subPackage(long packageID, long userID) {
-        return null;
+    public void setOwnerID(long ownerID) {
+        this.ownerID = ownerID;
     }
 }

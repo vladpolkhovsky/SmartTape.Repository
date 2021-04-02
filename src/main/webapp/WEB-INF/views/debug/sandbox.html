@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Package</title>
+</head>
+    <body style="width: 80%; margin: 0 auto">
+        <table  style="width: 500px; margin: 0 auto; border: 1px solid black;" th:if="${packages.getError() == null}">
+
+
+<!--        ПУСТЬ БУДЕТ НА ВСЯКИЙ СЛУЧАЙ. Тут будут отображаться все пакеты -->
+            <caption style="text-align: center">Пакеты.</caption>
+            <tbody>
+                <tr>
+                    <td>id</td>
+                    <td>ownerId</td>
+                    <td>links</td>
+                </tr>
+                <tr th:each="package: ${packages.getPackages()}">
+                    <td th:text="|${package.getId()}|" />
+                    <td th:text="|${package.getOwnerID()}|" />
+                    <td>
+                        <ul th:each="link: ${package.getLinks()}">
+                            <li th:text="|${link.getUrlAddress()}|" />
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>
