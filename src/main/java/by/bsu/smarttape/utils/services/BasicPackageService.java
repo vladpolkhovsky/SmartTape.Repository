@@ -1,5 +1,6 @@
 package by.bsu.smarttape.utils.services;
 
+import by.bsu.smarttape.models.Link;
 import by.bsu.smarttape.models.Package;
 import by.bsu.smarttape.utils.results.PackageStatus;
 import by.bsu.smarttape.utils.results.SimpleStatus;
@@ -55,6 +56,21 @@ public class BasicPackageService implements PackageService {
             code.set(SimpleStatus.ERROR);
             message.set(exception.toString());
             aPackage.set(null);
+        } else {
+            exception = DataBaseSessionService.safetyOperation(session -> {
+                CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+                CriteriaQuery<Link> criteriaQuery = criteriaBuilder.createQuery(Link.class);
+                Root<Link> linkRoot = criteriaQuery.from(Link.class);
+                criteriaQuery.select(linkRoot)
+                        .where(criteriaBuilder.equal(linkRoot.get("packageId"), aPackage.get().getId()));
+                TypedQuery<Link> query = session.createQuery(criteriaQuery);
+                aPackage.get().setLinks(query.getResultList());
+            });
+            if (exception != null) {
+                code.set(SimpleStatus.ERROR);
+                message.set("Ошибка при получении ссылок");
+                aPackage.set(null);
+            }
         }
 
         return PackageStatus.createStatus(
@@ -64,11 +80,16 @@ public class BasicPackageService implements PackageService {
         );
     }
 
+    // НЕ УВЕРЕН ЧТО РАБОТАЕТ СТАБИЛЬНО.
     @Override
     public PackageStatus savePackage(Package newPackage) {
         Exception exception = DataBaseSessionService.safetyOperation(session -> {
-            newPackage.getLinks().forEach(session::save);
             session.save(newPackage);
+            long pId = newPackage.getId();
+            newPackage.getLinks().forEach((x) -> {
+                x.setPackageId(pId);
+                session.save(x);
+            });
         });
         if(exception == null) {
             PackageStatus status = getPackage(newPackage.getId());

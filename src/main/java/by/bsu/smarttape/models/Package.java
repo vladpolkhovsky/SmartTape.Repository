@@ -39,6 +39,11 @@ public class Package {
         return links;
     }
 
+    @Transient
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
+
     @Column
     public long getOwnerID() {
         return ownerID;

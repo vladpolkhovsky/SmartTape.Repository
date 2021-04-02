@@ -3,6 +3,7 @@ package by.bsu.smarttape.controllers;
 import by.bsu.smarttape.models.Package;
 import by.bsu.smarttape.models.User;
 import by.bsu.smarttape.utils.services.ActiveSessionService;
+import by.bsu.smarttape.utils.services.BasicPackageService;
 import by.bsu.smarttape.utils.services.DataBaseSessionService;
 import org.hibernate.Session;
 import org.springframework.stereotype.Controller;
@@ -61,6 +62,7 @@ public class DebugController {
         return "views/debug/debug-sessions";
     }
 
+    // ПРОСТО ПРИМЕР. Вывод всех данных.
     public static class PackageWrapper {
         String error;
         List<Package> packages;
@@ -68,15 +70,26 @@ public class DebugController {
             Exception exception = DataBaseSessionService.safetyOperation(session -> {
                 CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
                 CriteriaQuery<Package> criteriaQuery = criteriaBuilder.createQuery(Package.class);
-
                 Root<Package> userRoot = criteriaQuery.from(Package.class);
                 criteriaQuery.select(userRoot);
-
                 TypedQuery<Package> query = session.createQuery(criteriaQuery);
                 packages = query.getResultList();
             });
             if(exception != null)
                 error = exception.getMessage();
+            else {
+                for (int i = 0; i < packages.size(); i++) {
+                    packages.set(
+                        i,
+                        //ПОЛУЧЕНИЕ СТАНДАРТНЫМ СПОСОБОМ.
+                        BasicPackageService
+                            .getInstance()
+                            .getPackage(
+                                packages.get(i).getId()
+                            ).getPackage()
+                    );
+                }
+            }
         }
 
         public String getError() {
