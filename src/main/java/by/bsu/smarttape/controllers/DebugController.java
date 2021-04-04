@@ -2,14 +2,21 @@ package by.bsu.smarttape.controllers;
 
 import by.bsu.smarttape.models.Package;
 import by.bsu.smarttape.models.User;
+import by.bsu.smarttape.models.social.Post;
 import by.bsu.smarttape.utils.services.ActiveSessionService;
 import by.bsu.smarttape.utils.services.BasicPackageService;
 import by.bsu.smarttape.utils.services.DataBaseSessionService;
+import by.bsu.smarttape.utils.services.social.SocialParser;
+import by.bsu.smarttape.utils.services.social.VKParser;
 import org.hibernate.Session;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -105,6 +112,43 @@ public class DebugController {
     public String sandbox(HttpServletRequest request, Model model) {
         model.addAttribute("packages", new PackageWrapper());
         return "views/debug/sandbox";
+    }
+
+    @GetMapping(value = "/post-checker", produces = MediaType.TEXT_HTML_VALUE + ";charset=utf8")
+    public ResponseEntity<String> postChecker(@RequestParam("url") String url) {
+        SocialParser parser = VKParser.parserBuilder(url);
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("<body>");
+        builder.append("<h1>").append("Посты").append("</h1>");
+        builder.append("<hr />");
+
+        List<Post> posts = parser.getPosts(20);
+
+        for (Post post : posts)
+            addToBuilder(builder, post);
+
+        builder.append("</body>");
+
+        return new ResponseEntity<>(builder.toString(), HttpStatus.OK);
+    }
+
+    private void addToBuilder(StringBuilder builder, Post post) {
+        builder.append("<div style=\"width: 80%; margin: 0 auto;\">");
+        builder.append("<img src=\"").append(post.getHeaderImageUrl()).append("\" />");
+        builder.append("<h2>").append(post.getHeaderTittle()).append("</h2>");
+        builder.append("<h3>").append(toCorrectHtmlString(post.getDescription())).append("</h3>");
+        builder.append("<hr/>");
+        builder.append("</div>");
+    }
+
+    private String toCorrectHtmlString(String description) {
+        StringBuilder builder = new StringBuilder();
+        System.out.println(description);
+        String[] lines = description.split("\n");
+        for (String line : lines)
+            builder.append("<p>").append(line).append("</p>");
+        return builder.toString();
     }
 
 }
