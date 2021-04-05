@@ -29,7 +29,6 @@ public class BasicPackageService implements PackageService {
 
     @Override
     public PackageStatus getPackage(long id) {
-
         AtomicInteger code = new AtomicInteger(SimpleStatus.OK);
         AtomicReference<Package> aPackage = new AtomicReference<>(null);
         AtomicReference<String> message = new AtomicReference<>("OK");
@@ -37,8 +36,9 @@ public class BasicPackageService implements PackageService {
         Exception exception = DataBaseSessionService.safetyOperation(session -> {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Package> criteriaQuery = criteriaBuilder.createQuery(Package.class);
-            Root<Package> userRoot = criteriaQuery.from(Package.class);
-            criteriaQuery.select(userRoot);
+            Root<Package> packageRoot = criteriaQuery.from(Package.class);
+            criteriaQuery.select(packageRoot)
+                .where(criteriaBuilder.equal(packageRoot.get("id"), id));
             TypedQuery<Package> query = session.createQuery(criteriaQuery);
             List<Package> list = query.getResultList();
             if (list.size() != 1) {

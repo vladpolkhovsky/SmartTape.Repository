@@ -111,7 +111,7 @@ public class DebugController {
     @GetMapping("/sandbox")
     public String sandbox(HttpServletRequest request, Model model) {
         model.addAttribute("packages", new PackageWrapper());
-        return "views/debug/sandbox";
+        return "views/debug/sandbox_new";
     }
 
     @GetMapping(value = "/post-checker", produces = MediaType.TEXT_HTML_VALUE + ";charset=utf8")

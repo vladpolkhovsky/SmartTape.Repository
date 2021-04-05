@@ -44,7 +44,7 @@ public class Package {
         this.links = links;
     }
 
-    @Column
+    @Column(unique = false)
     public long getOwnerID() {
         return ownerID;
     }
