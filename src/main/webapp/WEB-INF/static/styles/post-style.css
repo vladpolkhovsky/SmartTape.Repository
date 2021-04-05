@@ -1,0 +1,119 @@
+body {
+    background-color: #F3F3F3;
+}
+
+.post {
+    margin-top: 20px;
+    padding: 10px 10px 10px 10px;
+    background-color: white;
+}
+
+.feed-center {
+    width: 600px;
+    margin: 0 auto;
+}
+
+.post-header {
+    display: flex;
+}
+
+.header-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    border: 2px solid blueviolet;
+    margin: auto 0;
+}
+
+.header-tittle {
+    height: 80px;
+    width: 550px;
+}
+
+.header-tittle * {
+    margin: 5px;
+    font-family: 'Comfortaa', sans-serif;
+    font-size: 18pt;
+}
+
+.header-tittle p {
+    margin-top: 0;
+    height: 25px;
+    letter-spacing: -1px;
+}
+
+.header-user-name {
+    color: blueviolet;
+}
+
+.header-package-info {
+    font-size: 14pt;
+}
+
+.header-time {
+    font-size: 14pt;
+}
+
+.attachment-image-vk .main-image img {
+    display: block;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 600px;
+    max-height: 380px;
+}
+
+.attachment-image-vk .sub-images {
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-evenly;
+    height: 100px;
+}
+
+.attachment-image-vk .sub-images {
+    display: flex;
+    margin-top: 10px;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    height: 60px;
+    transition: all 0.3s;
+    background-color: #F3F3F3;
+    border-radius: 20px;
+}
+
+.attachment-image-vk .sub-images img {
+    margin-top: auto;
+    margin-bottom: auto;
+    height: 50px;
+    border-radius: 10px;
+    transition: all 0.3s;
+}
+
+.attachment-image-vk .sub-images img:hover {
+    height: 100px;
+    transition: all 1s;
+}
+
+.attachment-image-vk .sub-images:hover {
+    height: 110px;
+    transition: all 1s;
+}
+
+.attachment-video-vk iframe {
+    display: block;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 600px;
+    max-height: 380px;
+    width: 580px;
+    height: 400px;
+}
+
+.description-vk p {
+    margin: 10px auto;
+    font-family: 'Comfortaa';
+    font-size: 16pt;
+}
+

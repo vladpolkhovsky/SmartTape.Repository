@@ -1,5 +1,6 @@
 package by.bsu.smarttape.utils.services.social;
 
+import by.bsu.smarttape.models.social.Attachment;
 import by.bsu.smarttape.models.social.Post;
 import by.bsu.smarttape.models.social.PostVK;
 import com.google.gson.*;
@@ -75,11 +76,35 @@ public class VKParser implements SocialParser {
 
     private PostVK parsePostElement(JsonElement item, String headerName, String headerUrl) {
         return new PostVK (
+                screen_name,
                 headerUrl,
                 headerName,
                 item.getAsJsonObject().get("text").getAsString(),
-                null
+                parseAttachments(item)
         );
+    }
+
+    private List<Attachment> parseAttachments(JsonElement item) {
+        ArrayList<Attachment> list = new ArrayList<>();
+        JsonObject jsonObject = item.getAsJsonObject();
+        if (jsonObject.get("attachments") != null)
+            for (JsonElement element : jsonObject.get("attachments").getAsJsonArray()) {
+                JsonObject att = element.getAsJsonObject();
+                if (att.get("type").getAsString().equals("photo")) {
+                    JsonArray sizes = att.get("photo")
+                            .getAsJsonObject()
+                            .get("sizes")
+                            .getAsJsonArray();
+                    JsonObject maxSize = sizes.get(sizes.size() - 1).getAsJsonObject();
+                    list.add(
+                        new Attachment(
+                            Attachment.IMAGE,
+                            maxSize.get("url").getAsString()
+                        )
+                    );
+                }
+            }
+        return list;
     }
 
     public static VKParser parserBuilder(String url) {
