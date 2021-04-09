@@ -5,6 +5,7 @@
         <title>Умная Лента</title>
         <link th:href="@{/static/styles/feed-style.css}" rel="stylesheet">
         <link th:href="@{/static/styles/post-style.css}" rel="stylesheet">
+        <link th:href="@{/static/styles/profile-style.css}" rel="stylesheet">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
@@ -66,12 +67,18 @@
                     <!-- <iframe src="https://vk.com/video_ext.php?oid=-146296329&id=456242326&hash=d7696db39a94a8aa" frameborder="0" allowfullscreen></iframe> -->
 <!--                </div>-->
             </div>
-            <div class="description-vk">
+            <div class="description-vk" th:if="${post.getDescription().length() > 0}">
                 <p>
-                    <span class="header-user-name" th:text="'@' + |${post.getShortName()}|" />
+                    <span class="header-user-name" th:text="'@' + |${post.getShortName()}| + ':'" />
                     <span class="description-vk-text" th:text="|${post.getDescription()}|" />
                 </p>
             </div>
+        </div>
+    </div>
+    <div class="error-message" th:if="${exception != null}">
+        <h1 class="tabbed">Произошла ошибка &#128534;</h1>
+        <div class="background-white-error">
+            <p th:utext="${exception.toString()}" />
         </div>
     </div>
     <script defer th:src="@{/static/scripts/feed-script.js}"></script>

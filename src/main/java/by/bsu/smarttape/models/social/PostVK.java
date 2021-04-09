@@ -1,10 +1,9 @@
 package by.bsu.smarttape.models.social;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PostVK implements Post{
+public class PostVK implements Post {
 
     private final String headerImageUrl;
     private final String screenName;
@@ -59,6 +58,8 @@ public class PostVK implements Post{
 
     @Override
     public List<Attachment> getAttachmentListVideo() {
-        return new ArrayList<>();
+        return attachmentList.stream()
+                .filter(attachment -> attachment.getType() == Attachment.VIDEO)
+                .collect(Collectors.toList());
     }
 }

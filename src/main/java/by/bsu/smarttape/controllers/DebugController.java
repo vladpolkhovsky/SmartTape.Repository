@@ -114,25 +114,6 @@ public class DebugController {
         return "views/debug/sandbox_new";
     }
 
-    @GetMapping(value = "/post-checker", produces = MediaType.TEXT_HTML_VALUE + ";charset=utf8")
-    public ResponseEntity<String> postChecker(@RequestParam("url") String url) {
-        SocialParser parser = VKParser.parserBuilder(url);
-
-        StringBuilder builder = new StringBuilder();
-        builder.append("<body>");
-        builder.append("<h1>").append("Посты").append("</h1>");
-        builder.append("<hr />");
-
-        List<Post> posts = parser.getPosts(20);
-
-        for (Post post : posts)
-            addToBuilder(builder, post);
-
-        builder.append("</body>");
-
-        return new ResponseEntity<>(builder.toString(), HttpStatus.OK);
-    }
-
     private void addToBuilder(StringBuilder builder, Post post) {
         builder.append("<div style=\"width: 80%; margin: 0 auto;\">");
         builder.append("<img src=\"").append(post.getHeaderImageUrl()).append("\" />");
