@@ -75,3 +75,23 @@ searchLine.onfocus = (x => searchLineWords());
 function body_onload() {
     searchLine.focus();
 }
+
+function onImageSliderClick(event) {
+    event.parentNode.parentNode.firstChild.nextSibling.firstChild.nextSibling.src = event.src;
+}
+
+function showMore(event) {
+    event.classList.add("hidden");
+    let discr = event.previousSibling.previousSibling;
+    let closeBtn = event.nextSibling.nextSibling;
+    discr.classList.remove("see-more");
+    closeBtn.classList.remove("hidden");
+}
+
+function hide(event) {
+    event.classList.add("hidden");
+    let discr = event.previousSibling.previousSibling.previousSibling.previousSibling;
+    discr.classList.add("see-more");
+    let openBtn = event.previousSibling.previousSibling;
+    openBtn.classList.remove("hidden");
+}

@@ -175,7 +175,7 @@ public class VKParser implements SocialParser {
                 });
             }
         } catch (Exception ignored) {
-            System.out.println(ignored.getMessage());
+
         }
         return new PostVK(
                 screenName,

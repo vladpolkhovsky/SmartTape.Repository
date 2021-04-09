@@ -116,3 +116,19 @@ body {
     font-size: 16pt;
 }
 
+.see-more {
+    height: 100px;
+    overflow: hidden;
+}
+
+.hidden {
+    display: none;
+}
+
+.bar {
+    font-family: 'Comfortaa', sans-serif;
+    font-size: 16pt;
+    margin-top: 20px;
+    margin-left: 20px;
+    color: blueviolet;
+}
