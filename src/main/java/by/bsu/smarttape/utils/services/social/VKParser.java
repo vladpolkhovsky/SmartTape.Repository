@@ -163,13 +163,19 @@ public class VKParser implements SocialParser {
         String text = item.getAsJsonObject().get("text").getAsString();
         List<Attachment> attachments = new ArrayList<>();
         try {
-            item.getAsJsonObject().get("attachments").getAsJsonArray().forEach((x) -> {
-                Attachment attachment = parseAttachment(x);
-                if (attachment != null)
-                    attachments.add(attachment);
-            });
+            if (item.getAsJsonObject().get("copy_history") != null && !item.getAsJsonObject().get("copy_history").isJsonNull()) {
+                JsonArray copy_array = item.getAsJsonObject().get("copy_history").getAsJsonArray();
+                item = copy_array.get(copy_array.size() - 1);
+                return parsePost(getRepostOwner(item), getHeaderUrl());
+            } else {
+                item.getAsJsonObject().get("attachments").getAsJsonArray().forEach((x) -> {
+                    Attachment attachment = parseAttachment(x);
+                    if (attachment != null)
+                        attachments.add(attachment);
+                });
+            }
         } catch (Exception ignored) {
-
+            System.out.println(ignored.getMessage());
         }
         return new PostVK(
                 screenName,
@@ -178,6 +184,17 @@ public class VKParser implements SocialParser {
                 text,
                 attachments
         );
+    }
+
+    private JsonElement getRepostOwner(JsonElement item) throws ClientException {
+        return JsonParser.parseString(
+                vkApiClient.wall()
+                        .getByIdLegacy(
+                                serviceActor,
+                                item.getAsJsonObject().get("owner_id").getAsString()+"_"+item.getAsJsonObject().get("id").getAsString()
+                        )
+                        .executeAsString()
+        ).getAsJsonObject().get("response").getAsJsonArray().get(0);
     }
 
     private Attachment parseAttachment(JsonElement attachment) {
