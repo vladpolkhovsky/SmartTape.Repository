@@ -166,16 +166,21 @@ public class VKParser implements SocialParser {
             if (item.getAsJsonObject().get("copy_history") != null && !item.getAsJsonObject().get("copy_history").isJsonNull()) {
                 JsonArray copy_array = item.getAsJsonObject().get("copy_history").getAsJsonArray();
                 item = copy_array.get(copy_array.size() - 1);
-                return parsePost(getRepostOwner(item), getHeaderUrl());
+                JsonElement element = getRepostOwner(item);
+                if (element == null)
+                    System.out.println(item);
+                return parsePost(element, getHeaderUrl());
             } else {
-                item.getAsJsonObject().get("attachments").getAsJsonArray().forEach((x) -> {
-                    Attachment attachment = parseAttachment(x);
-                    if (attachment != null)
-                        attachments.add(attachment);
-                });
+                if (item.getAsJsonObject().get("attachments") != null) {
+                    item.getAsJsonObject().get("attachments").getAsJsonArray().forEach((x) -> {
+                        Attachment attachment = parseAttachment(x);
+                        if (attachment != null)
+                            attachments.add(attachment);
+                    });
+                }
             }
         } catch (Exception ignored) {
-
+            ignored.printStackTrace();
         }
         return new PostVK(
                 screenName,
@@ -186,15 +191,19 @@ public class VKParser implements SocialParser {
         );
     }
 
-    private JsonElement getRepostOwner(JsonElement item) throws ClientException {
-        return JsonParser.parseString(
+    //TODO Приватные профили доделать.
+    private JsonElement getRepostOwner(JsonElement item) throws ClientException, ParserException {
+        JsonElement repostArray = JsonParser.parseString(
                 vkApiClient.wall()
                         .getByIdLegacy(
                                 serviceActor,
                                 item.getAsJsonObject().get("owner_id").getAsString()+"_"+item.getAsJsonObject().get("id").getAsString()
                         )
                         .executeAsString()
-        ).getAsJsonObject().get("response").getAsJsonArray().get(0);
+        ).getAsJsonObject().get("response").getAsJsonArray();
+        if (repostArray != null && repostArray.getAsJsonArray().size() > 0)
+            return repostArray.getAsJsonArray().get(0);
+        throw new ParserException("Приватный профиль или нет такой записи.");
     }
 
     private Attachment parseAttachment(JsonElement attachment) {

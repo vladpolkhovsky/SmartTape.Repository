@@ -7,7 +7,7 @@ public interface Post {
     String getHeaderTittle();
     String getHeaderImageUrl();
     String getDescription();
-    String getTime();
+    long getTime();
     List<Attachment> getAttachmentList();
     List<Attachment> getAttachmentListPicture();
     List<Attachment> getAttachmentListVideo();

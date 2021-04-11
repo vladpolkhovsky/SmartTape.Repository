@@ -72,26 +72,42 @@ searchLine.onblur = (x => killLineWords());
 
 searchLine.onfocus = (x => searchLineWords());
 
-function body_onload() {
-    searchLine.focus();
-}
+searchLine.onfocus();
 
 function onImageSliderClick(event) {
-    event.parentNode.parentNode.firstChild.nextSibling.firstChild.nextSibling.src = event.src;
+    console.log(event);
+    console.log(event.parentNode.parentNode);
+    console.log(event.parentNode.parentNode.firstChild.firstChild);
+    console.log(event.parentNode.parentNode.firstChild.firstChild.src=event.src);
 }
 
 function showMore(event) {
     event.classList.add("hidden");
-    let discr = event.previousSibling.previousSibling;
-    let closeBtn = event.nextSibling.nextSibling;
+    let discr = event.previousSibling;
+    let closeBtn = event.nextSibling;
     discr.classList.remove("see-more");
     closeBtn.classList.remove("hidden");
 }
 
 function hide(event) {
     event.classList.add("hidden");
-    let discr = event.previousSibling.previousSibling.previousSibling.previousSibling;
+    let discr = event.previousSibling.previousSibling;
     discr.classList.add("see-more");
-    let openBtn = event.previousSibling.previousSibling;
+    let openBtn = event.previousSibling;
     openBtn.classList.remove("hidden");
 }
+
+let block = false;
+
+window.onscroll = function(event) {
+    let scrollHeight = Math.max(
+        document.body.scrollHeight, document.documentElement.scrollHeight,
+        document.body.offsetHeight, document.documentElement.offsetHeight,
+        document.body.clientHeight, document.documentElement.clientHeight
+    );
+    if (!block && scrollHeight - window.pageYOffset < 2000) {
+        if (!block) {
+            getNewPosts();
+        }
+    }
+};

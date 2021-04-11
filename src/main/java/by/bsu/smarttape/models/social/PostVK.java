@@ -40,8 +40,8 @@ public class PostVK implements Post {
     }
 
     @Override
-    public String getTime() {
-        return "вчера";
+    public long getTime() {
+        return 0;
     }
 
     @Override

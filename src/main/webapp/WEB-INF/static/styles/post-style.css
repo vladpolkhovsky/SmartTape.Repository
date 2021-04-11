@@ -112,13 +112,14 @@ body {
 
 .description-vk p {
     margin: 10px auto;
-    font-family: 'Comfortaa';
+    font-family: 'Comfortaa', sans-serif;
     font-size: 16pt;
 }
 
 .see-more {
     height: 100px;
     overflow: hidden;
+    transition: all 1s 0.3s;
 }
 
 .hidden {
