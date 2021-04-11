@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -56,7 +57,7 @@ public class ApiController {
             }
         }
 
-        postList.sort(Comparator.comparingLong(Post::getTime));
+        postList.sort(Comparator.comparingLong(Post::getTime).reversed());
 
         JsonObject jsonObject = new JsonObject();
         JsonArray postArray = new JsonArray();
@@ -77,6 +78,7 @@ public class ApiController {
         postJson.addProperty("header_short_name", post.getShortName());
         postJson.addProperty("description", post.getDescription());
         postJson.addProperty("time", timeBeautifier(post.getTime()));
+        postJson.addProperty("package_name", "Больше в пакете Популярное.");
         postJson.add("attachments", parseAttachments(post.getAttachmentList()));
         postArray.add(postJson);
     }
@@ -93,7 +95,10 @@ public class ApiController {
     }
 
     private String timeBeautifier(long time) {
-        return String.valueOf(time);
+        java.util.Date dateTime = new java.util.Date((long)time*1000);
+        Locale locale = new Locale("ru");
+        SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy HH:mm",locale);
+        return df.format(dateTime);
     }
 
 }

@@ -161,6 +161,7 @@ public class VKParser implements SocialParser {
 
     private Post parsePost(JsonElement item, String profileUrl) {
         String text = item.getAsJsonObject().get("text").getAsString();
+        long time = item.getAsJsonObject().get("date").getAsLong();
         List<Attachment> attachments = new ArrayList<>();
         try {
             if (item.getAsJsonObject().get("copy_history") != null && !item.getAsJsonObject().get("copy_history").isJsonNull()) {
@@ -187,7 +188,8 @@ public class VKParser implements SocialParser {
                 profileUrl,
                 "VK",
                 text,
-                attachments
+                attachments,
+                time
         );
     }
 

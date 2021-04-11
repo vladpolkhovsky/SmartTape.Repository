@@ -10,13 +10,15 @@ public class PostVK implements Post {
     private final String headerTittle;
     private final String description;
     private final List<Attachment> attachmentList;
+    private final long time;
 
-    public PostVK(String screenName, String headerImageUrl, String headerTittle, String description, List<Attachment> attachmentList) {
+    public PostVK(String screenName, String headerImageUrl, String headerTittle, String description, List<Attachment> attachmentList, long time) {
         this.screenName = screenName;
         this.description = description;
         this.headerTittle = headerTittle;
         this.headerImageUrl = headerImageUrl;
         this.attachmentList = attachmentList;
+        this.time = time;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class PostVK implements Post {
 
     @Override
     public long getTime() {
-        return 0;
+        return time;
     }
 
     @Override

@@ -23,13 +23,12 @@ function getNewPosts() {
 }
 
 async function createPost(element) {
-    //console.log(element);
     console.log(element.header_short_name)
     let postDiv = feed_center.appendChild(document.createElement("div"));
     postDiv.classList.add("post");
     let postDivHeader = postDiv.appendChild(document.createElement("div"));
     postDivHeader.classList.add("post-header");
-    createHeader(postDivHeader, element.header_tittle, element.header_short_name, element.header_url, element.time, "Новое");
+    createHeader(postDivHeader, element.header_tittle, element.header_short_name, element.header_url, element.time, element.package_name);
 
     if (element.attachments.length > 0) {
         let imageDiv = postDiv.appendChild(document.createElement("div"));
@@ -73,14 +72,14 @@ async function createHeader(postDivHeader, tittle, screenName, headerSrc, time, 
     span_screen_name.innerText = '@' + screenName;
     span_screen_name.classList.add("header-user-name");
     span.innerText = "|";
-    span_tittle.innerText = tittle;
+    span_tittle.innerHTML = tittle;
     let span_time = headerP.appendChild(document.createElement("span"))
     span = headerP.appendChild(document.createElement("span"))
     let span_pinfo = headerP.appendChild(document.createElement("span"))
     span_time.innerText = time;
     span_time.classList.add("header-time");
     span.innerText = "|";
-    span_pinfo.innerText = package_;
+    span_pinfo.innerHTML = package_;
     span_pinfo.classList.add("header-package-info");
 }
 
