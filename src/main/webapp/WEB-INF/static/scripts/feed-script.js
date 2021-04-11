@@ -72,7 +72,7 @@ searchLine.onblur = (x => killLineWords());
 
 searchLine.onfocus = (x => searchLineWords());
 
-searchLine.onfocus();
+document.body.onload = (x => searchLine.focus());
 
 function onImageSliderClick(event) {
     console.log(event);
