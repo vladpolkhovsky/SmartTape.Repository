@@ -3,17 +3,26 @@ package by.bsu.smarttape.utils.services.social;
 import by.bsu.smarttape.models.social.Attachment;
 import by.bsu.smarttape.models.social.Post;
 import by.bsu.smarttape.models.social.PostVK;
+import by.bsu.smarttape.utils.services.social.exceptions.BadSocialNetworkException;
+import by.bsu.smarttape.utils.services.social.exceptions.ParserException;
 import com.google.gson.*;
 import com.vk.api.sdk.client.TransportClient;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.ServiceActor;
+import com.vk.api.sdk.client.actors.UserActor;
+import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
-import com.vk.api.sdk.objects.groups.responses.GetByIdLegacyResponse;
+import com.vk.api.sdk.objects.enums.WallFilter;
+import com.vk.api.sdk.objects.users.Fields;
+import com.vk.api.sdk.objects.utils.DomainResolvedType;
 import com.vk.api.sdk.objects.utils.responses.ResolveScreenNameResponse;
+import com.vk.api.sdk.queries.groups.GroupsGetByIdQueryWithLegacy;
+import com.vk.api.sdk.queries.users.UsersGetQuery;
 import com.vk.api.sdk.queries.wall.WallGetQuery;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class VKParser implements SocialParser {
 
@@ -21,98 +30,213 @@ public class VKParser implements SocialParser {
     private static final String SERVICE_KEY = "8861687088616870886168704988165ea28886188616870e8098ac3eafea732534a6dc2";
     private static final ServiceActor SERVICE_ACTOR = new ServiceActor(APP_ID, SERVICE_KEY);
 
-    private String screen_name;
+    private final Integer id;
+    private final String screenName;
+    private final ServiceActor serviceActor;
+    private final UserActor userActor;
 
-    private List<Post> list;
+    private final List<Post> list = new ArrayList<>();
 
-    private VKParser(String url) {
-        this.screen_name = url.substring(url.lastIndexOf('/') + 1);
-        System.out.println("screen_name " + screen_name);
-        parse();
+    private VkApiClient vkApiClient = null;
+
+    private void checkUrl(String url) throws BadSocialNetworkException {
+        if (!Pattern.matches("(https://|)?(vk.com/)([\\w.])+", url))
+            throw new BadSocialNetworkException(url, "VK");
     }
 
-    private void parse() {
-        TransportClient transportClient = HttpTransportClient.getInstance();
-        VkApiClient vk = new VkApiClient(transportClient);
+    private Integer resolveName(String screen_name) throws ParserException {
         try {
-            JsonObject jsonObject = new JsonObject();
-
-            ResolveScreenNameResponse screenNameResponse = vk.utils()
-                    .resolveScreenName(SERVICE_ACTOR, screen_name)
-                    .execute();
-
-            List<GetByIdLegacyResponse> groupInfo = vk.groups().getByIdLegacy(SERVICE_ACTOR)
-                    .groupIds(screenNameResponse.getObjectId().toString())
-                    .execute();
-
-            WallGetQuery wallGetQuery = vk.wall()
-                    .get(SERVICE_ACTOR)
-                    .ownerId(-screenNameResponse.getObjectId())
-                    .count(90);
-            String wallQuery = wallGetQuery.executeAsString();
-
-            JsonElement response = JsonParser.parseString(wallQuery);
-
-            if (response.getAsJsonObject().get("error") == null) {
-
-                int count = response.getAsJsonObject()
-                        .get("response").getAsJsonObject()
-                        .get("count").getAsInt();
-
-                JsonArray items = response.getAsJsonObject()
-                        .get("response").getAsJsonObject()
-                        .get("items").getAsJsonArray();
-
-                list = new ArrayList<>();
-
-                for (JsonElement item : items) {
-                    list.add(parsePostElement(item, groupInfo.get(0).getName(), groupInfo.get(0).getPhoto200().toString()));
-                }
-            }
+            ResolveScreenNameResponse screenNameResponse = vkApiClient.utils().resolveScreenName(serviceActor, screen_name).execute();
+            return Integer.valueOf(
+                    screenNameResponse.getType().getValue().equals(DomainResolvedType.USER.getValue()) ?
+                            screenNameResponse.getObjectId().toString() : "-" + screenNameResponse.getObjectId().toString()
+            );
         } catch (Exception ex) {
-            ex.printStackTrace();
+            throw new ParserException(
+                    "Произошла ошибка. Скорее всего имя пользователя введено неверно.<br>"+
+                    "<span class=\"error\">" + ex.getMessage() + "</span>"
+            );
         }
     }
 
-    private PostVK parsePostElement(JsonElement item, String headerName, String headerUrl) {
-        return new PostVK (
-                screen_name,
-                headerUrl,
-                headerName,
-                item.getAsJsonObject().get("text").getAsString(),
-                parseAttachments(item)
+    private VKParser(String url, UserActor userActor) throws ParserException {
+        this.userActor = userActor;
+        this.serviceActor = SERVICE_ACTOR;
+        checkUrl(url);
+        initVkApi();
+        try {
+            this.screenName = url.substring(url.lastIndexOf('/') + 1);
+            this.id = resolveName(url.substring(url.lastIndexOf('/') + 1));
+        } catch (Exception ex) {
+            throw new ParserException(ex.getMessage());
+        }
+        System.out.println(id);
+    }
+
+    public static VKParser getInstance(String url) throws ParserException {
+        return getInstance(url, null);
+    }
+
+    public static VKParser getInstance(String url, UserActor userActor) throws ParserException {
+        return new VKParser(url, userActor);
+    }
+
+    private void initVkApi() {
+        TransportClient transportClient = HttpTransportClient.getInstance();
+        this.vkApiClient = new VkApiClient(transportClient);
+    }
+
+    private WallGetQuery getWallGetQuery() {
+        if (userActor != null)
+            return vkApiClient.wall().get(userActor);
+        return vkApiClient.wall().get(serviceActor);
+    }
+
+    private void parse(int start, int limit) throws ParserException {
+        try {
+            String wallQuery = getWallGetQuery()
+                    .ownerId(id)
+                    .offset(start)
+                    .count(limit)
+                    .filter(WallFilter.OWNER)
+                    .executeAsString();
+            list.addAll(parsePosts(wallQuery));
+        } catch (Exception exception) {
+            throw new ParserException(exception.getMessage());
+        }
+    }
+
+    private List<Post> parsePosts(String wallQuery) {
+        JsonObject response = JsonParser.parseString(wallQuery)
+                .getAsJsonObject()
+                .get("response")
+                .getAsJsonObject();
+        String headerUrl = getHeaderUrl();
+        JsonArray items = response.get("items").isJsonNull() ?
+                new JsonArray() : response.get("items").getAsJsonArray();
+        List<Post> posts = new ArrayList<>();
+        items.forEach((item) -> posts.add(parsePost(item, headerUrl)));
+        return posts;
+    }
+
+    private String getUserHeaderUrl(UsersGetQuery query) {
+        try {
+            JsonElement element = JsonParser.parseString(query.userIds(id.toString()).fields(Fields.PHOTO_100).executeAsString());
+            return element.getAsJsonObject().get("response")
+                    .getAsJsonArray().get(0)
+                    .getAsJsonObject()
+                    .get("photo_100")
+                    .getAsString();
+        } catch (ClientException ex) {
+            return null;
+        }
+    }
+
+    private String getGroupHeaderUrl(GroupsGetByIdQueryWithLegacy query) {
+        try {
+            JsonElement element = JsonParser.parseString(query.groupIds(id.toString().substring(1)).executeAsString());
+            return element.getAsJsonObject().get("response")
+                    .getAsJsonArray().get(0)
+                    .getAsJsonObject()
+                    .get("photo_100")
+                    .getAsString();
+        } catch (ClientException ex) {
+            return null;
+        }
+    }
+
+    private String getHeaderUrl() {
+        if (userActor == null) {
+            if (id.toString().startsWith("-"))
+                return getGroupHeaderUrl(vkApiClient.groups().getByIdLegacy(serviceActor));
+            else
+                return getUserHeaderUrl(vkApiClient.users().get(serviceActor));
+        } else {
+            if (id.toString().startsWith("-"))
+                return getGroupHeaderUrl(vkApiClient.groups().getByIdLegacy(userActor));
+            else
+                return getUserHeaderUrl(vkApiClient.users().get(userActor));
+        }
+    }
+
+    private Post parsePost(JsonElement item, String profileUrl) {
+        String text = item.getAsJsonObject().get("text").getAsString();
+        long time = item.getAsJsonObject().get("date").getAsLong();
+        List<Attachment> attachments = new ArrayList<>();
+        try {
+            if (item.getAsJsonObject().get("copy_history") != null && !item.getAsJsonObject().get("copy_history").isJsonNull()) {
+                JsonArray copy_array = item.getAsJsonObject().get("copy_history").getAsJsonArray();
+                item = copy_array.get(copy_array.size() - 1);
+                JsonElement element = getRepostOwner(item);
+                if (element == null)
+                    System.out.println(item);
+                return parsePost(element, getHeaderUrl());
+            } else {
+                if (item.getAsJsonObject().get("attachments") != null) {
+                    item.getAsJsonObject().get("attachments").getAsJsonArray().forEach((x) -> {
+                        Attachment attachment = parseAttachment(x);
+                        if (attachment != null)
+                            attachments.add(attachment);
+                    });
+                }
+            }
+        } catch (Exception ignored) {
+            ignored.printStackTrace();
+        }
+        return new PostVK(
+                screenName,
+                profileUrl,
+                "VK",
+                text,
+                attachments,
+                time
         );
     }
 
-    private List<Attachment> parseAttachments(JsonElement item) {
-        ArrayList<Attachment> list = new ArrayList<>();
-        JsonObject jsonObject = item.getAsJsonObject();
-        if (jsonObject.get("attachments") != null)
-            for (JsonElement element : jsonObject.get("attachments").getAsJsonArray()) {
-                JsonObject att = element.getAsJsonObject();
-                if (att.get("type").getAsString().equals("photo")) {
-                    JsonArray sizes = att.get("photo")
-                            .getAsJsonObject()
-                            .get("sizes")
-                            .getAsJsonArray();
-                    JsonObject maxSize = sizes.get(sizes.size() - 1).getAsJsonObject();
-                    list.add(
-                        new Attachment(
-                            Attachment.IMAGE,
-                            maxSize.get("url").getAsString()
+    //TODO Приватные профили доделать.
+    private JsonElement getRepostOwner(JsonElement item) throws ClientException, ParserException {
+        JsonElement repostArray = JsonParser.parseString(
+                vkApiClient.wall()
+                        .getByIdLegacy(
+                                serviceActor,
+                                item.getAsJsonObject().get("owner_id").getAsString()+"_"+item.getAsJsonObject().get("id").getAsString()
                         )
-                    );
-                }
-            }
-        return list;
+                        .executeAsString()
+        ).getAsJsonObject().get("response").getAsJsonArray();
+        if (repostArray != null && repostArray.getAsJsonArray().size() > 0)
+            return repostArray.getAsJsonArray().get(0);
+        throw new ParserException("Приватный профиль или нет такой записи.");
     }
 
-    public static VKParser parserBuilder(String url) {
-        return new VKParser(url);
+    private Attachment parseAttachment(JsonElement attachment) {
+        int type = attachment.getAsJsonObject().get("type").getAsString().equals("photo") ?
+                Attachment.IMAGE : Attachment.VIDEO;
+        if (type == Attachment.IMAGE) {
+            JsonArray photos = attachment
+                    .getAsJsonObject()
+                    .get("photo")
+                    .getAsJsonObject()
+                    .get("sizes")
+                    .getAsJsonArray();
+            return new Attachment(
+                    type,
+                    photos.get(photos.size() - 1)
+                            .getAsJsonObject()
+                            .get("url").getAsString()
+            );
+        }
+        return null;
     }
 
     @Override
-    public List<Post> getPosts(int limit) {
-        return list.subList(0, limit);
+    public List<Post> getPosts(int start, int limit) {
+        list.clear();
+        try {
+            parse(start, limit);
+        } catch (ParserException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+        return list;
     }
 }

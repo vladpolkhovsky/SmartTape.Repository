@@ -8,7 +8,7 @@ const span = document.getElementById("password-checker-span");
 const l_span = document.getElementById("user-name-checker-span");
 
 function checkPasswords() {
-    if (password_1.value != password_2.value || password_1.value === "" || password_2.value === "") {
+    if (password_1.value !== password_2.value || password_1.value === "" || password_2.value === "") {
         password_1.style.borderColor = password_2.style.borderColor = "#6E00B3";
         password_1.style.borderWidth = password_2.style.borderWidth = "4px";
         doRegButton.disabled = true;

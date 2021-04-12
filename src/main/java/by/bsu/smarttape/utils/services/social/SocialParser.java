@@ -5,5 +5,5 @@ import by.bsu.smarttape.models.social.Post;
 import java.util.List;
 
 public interface SocialParser {
-    List<Post> getPosts(int limit);
+    List<Post> getPosts(int start, int limit);
 }

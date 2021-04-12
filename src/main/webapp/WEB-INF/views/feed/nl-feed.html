@@ -5,6 +5,7 @@
         <title>Умная Лента</title>
         <link th:href="@{/static/styles/feed-style.css}" rel="stylesheet">
         <link th:href="@{/static/styles/post-style.css}" rel="stylesheet">
+        <link th:href="@{/static/styles/profile-style.css}" rel="stylesheet">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
@@ -42,38 +43,16 @@
 
         </div>
     </header>
-    <div class="feed-center" th:each="post : ${posts}">
-        <div class="post">
-            <div class="post-header">
-                <img class="header-img" th:src="${post.getHeaderImageUrl()}" />
-                <div class="header-tittle">
-                    <h1>
-                        <span class="header-user-name" th:text="'@' + |${post.getShortName()}|" />|<span th:text="|${post.getHeaderTittle()}|" />
-                    </h1>
-                    <p><span class="header-time" th:text="|${post.getTime()}|" />|<span class="header-package-info">Больше в пакете "Популярное".</span></p>
-                </div>
-            </div>
-            <div class="attachments" th:if="${post.getAttachmentList().size() > 0}">
-                <div class="attachment-image-vk" th:if="${post.getAttachmentListPicture().size() > 0}">
-                    <div class="main-image">
-                        <img th:src="${post.getAttachmentListPicture().get(0).getAttachmentUrl()}">
-                    </div>
-                    <div class="sub-images" th:if="${post.getAttachmentListPicture().size() > 1}">
-                        <img th:each="att : ${post.getAttachmentListPicture()}" th:src="${att.getAttachmentUrl()}">
-                    </div>
-                </div>
-<!--                <div class="attachment-video-vk">-->
-                    <!-- <iframe src="https://vk.com/video_ext.php?oid=-146296329&id=456242326&hash=d7696db39a94a8aa" frameborder="0" allowfullscreen></iframe> -->
-<!--                </div>-->
-            </div>
-            <div class="description-vk">
-                <p>
-                    <span class="header-user-name" th:text="'@' + |${post.getShortName()}|" />
-                    <span class="description-vk-text" th:text="|${post.getDescription()}|" />
-                </p>
-            </div>
+    <div class="feed-center">
+
+    </div>
+    <div class="error-message" th:if="${exception != null}">
+        <h1 class="tabbed">Произошла ошибка &#128534;</h1>
+        <div class="background-white-error">
+            <p th:utext="${exception.toString()}" />
         </div>
     </div>
     <script defer th:src="@{/static/scripts/feed-script.js}"></script>
+    <script defer th:src="@{/static/scripts/post-script.js}"></script>
     </body>
 </html>
