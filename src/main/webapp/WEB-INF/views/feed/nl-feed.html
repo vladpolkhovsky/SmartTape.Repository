@@ -43,14 +43,18 @@
 
         </div>
     </header>
-    <div class="feed-center">
-
-    </div>
     <div class="error-message" th:if="${exception != null}">
         <h1 class="tabbed">Произошла ошибка &#128534;</h1>
         <div class="background-white-error">
             <p th:utext="${exception.toString()}" />
         </div>
+    </div>
+    <div class="feed-center">
+
+    </div>
+    <div class="load">
+        <img src="https://www.kadrtour.com/kadr_tour/public/img/fancybox_loading2.gif" />
+        <h2>Загрузка</h2>
     </div>
     <script defer th:src="@{/static/scripts/feed-script.js}"></script>
     <script defer th:src="@{/static/scripts/post-script.js}"></script>

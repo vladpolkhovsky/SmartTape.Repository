@@ -92,6 +92,7 @@
 }
 
 .error-message {
+    position: absolute;
     width: 500px;
 
     font-family: 'Comfortaa', sans-serif;

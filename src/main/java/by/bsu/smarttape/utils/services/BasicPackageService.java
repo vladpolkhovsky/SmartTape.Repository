@@ -110,7 +110,12 @@ public class BasicPackageService implements PackageService {
 
     @Override
     public PackageStatus updatePackage(Package updPackage) {
-        return null;
+
+        return new PackageStatus(
+                SimpleStatus.OK,
+                null,
+                null
+        );
     }
 
     @Override
