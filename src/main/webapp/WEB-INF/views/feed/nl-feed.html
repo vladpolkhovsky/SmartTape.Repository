@@ -44,8 +44,8 @@
         </div>
     </header>
     <div class="error-message" th:if="${exception != null}">
-        <h1 class="tabbed">Произошла ошибка &#128534;</h1>
         <div class="background-white-error">
+            <h1 class="tabbed">Произошла ошибка &#128534;</h1>
             <p th:utext="${exception.toString()}" />
         </div>
     </div>
