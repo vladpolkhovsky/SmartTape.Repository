@@ -1,13 +1,9 @@
 package by.bsu.smarttape.controllers;
 
-import by.bsu.smarttape.models.Link;
 import by.bsu.smarttape.models.User;
-import by.bsu.smarttape.models.Package;
 import by.bsu.smarttape.models.social.Post;
 import by.bsu.smarttape.utils.presentation.HeaderModel;
 import by.bsu.smarttape.utils.services.ActiveSessionService;
-import by.bsu.smarttape.utils.services.BasicPackageService;
-import by.bsu.smarttape.utils.services.PackageService;
 import by.bsu.smarttape.utils.services.social.VKParser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,5 +36,4 @@ public class FeedController {
         }
         return "views/feed/nl-feed";
     }
-
 }

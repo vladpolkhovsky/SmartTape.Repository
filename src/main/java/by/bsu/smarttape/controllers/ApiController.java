@@ -40,12 +40,12 @@ public class ApiController {
 
     @GetMapping(value = "/posts", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getPost(
-            @RequestParam("package-id") String id,
+            @RequestParam("package-id") long id,
             @RequestParam("offset") int offset,
             @RequestParam("count") int count
         ) {
 
-        PackageStatus basePackage = BasicPackageService.getInstance().getPackage(basePackageId);
+        PackageStatus basePackage = BasicPackageService.getInstance().getPackage(id);
 
         List<Post> postList = new ArrayList<>();
 
