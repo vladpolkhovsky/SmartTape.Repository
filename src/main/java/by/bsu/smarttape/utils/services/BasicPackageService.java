@@ -4,6 +4,7 @@ import by.bsu.smarttape.models.Link;
 import by.bsu.smarttape.models.Package;
 import by.bsu.smarttape.utils.results.PackageStatus;
 import by.bsu.smarttape.utils.results.SimpleStatus;
+import org.hibernate.Session;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -108,14 +109,56 @@ public class BasicPackageService implements PackageService {
         return PackageStatus.createStatus(SimpleStatus.ERROR, exception.getMessage(), null);
     }
 
+    /**
+     * @param updPackage пакет который бует обновлён, важно чтобы поле id было правильным.
+     * Это значит что после получения этого пакета из БД. Оно должно быть неизменным.
+     * Важно отметить, что ссылки которые были изменены должны иметь тот же самый ID, добавленные
+     * ссылки должны иметь ID = 0, а ссылки которые были удалены должны иметь ID < 0.
+     * @return PackageStatus который будет иметь обновлённый пакет, если всё прошло успешно или сообщение об ошибке.
+     */
+
     @Override
     public PackageStatus updatePackage(Package updPackage) {
+
+        Exception ex = DataBaseSessionService.safetyOperation(session -> {
+           for (Link link : updPackage.getLinks()) {
+               if (link.getId() < 0)
+                   delLink(session, link);
+               else if (link.getId() == 0)
+                   addLink(session, link);
+               else if (link.getId() > 0)
+                   updLink(session, link);
+           }
+        });
+
+        if (ex != null) {
+            return new PackageStatus(
+                    SimpleStatus.ERROR,
+                    ex.getMessage(),
+                    null
+            );
+        }
 
         return new PackageStatus(
                 SimpleStatus.OK,
                 null,
-                null
+                BasicPackageService.getInstance().getPackage(updPackage.getId()).getPackage()
         );
+    }
+    private void updLink(Session session, Link link) {
+        session.evict(link);
+        session.update(link);
+    }
+
+    private void delLink(Session session, Link link) {
+        link.setId(-1 * link.getId());
+        session.delete(link);
+    }
+
+    private void addLink(Session session, Link link) {
+        session.save(link);
+        long pId = link.getId();
+        link.setId(pId);
     }
 
     @Override
