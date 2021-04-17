@@ -36,5 +36,4 @@ public class FeedController {
         }
         return "views/feed/nl-feed";
     }
-
 }

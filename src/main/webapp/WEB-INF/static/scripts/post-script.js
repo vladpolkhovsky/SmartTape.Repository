@@ -4,10 +4,21 @@ let count = 10;
 
 const feed_center = document.getElementsByClassName("feed-center")[0];
 
+let id = 1;
+
+const queryString = window.location.search;
+console.log(queryString);
+
+const urlParams = new URLSearchParams(queryString);
+let pId = urlParams.get('pID')
+
+if (pId !== null)
+    id = pId;
+
 function getNewPosts() {
     block = true;
     let xhr = new XMLHttpRequest();
-    let url = './api/posts?package-id=1&offset='+offset+'&count='+count;
+    let url = './api/posts?package-id='+id+'&offset='+offset+'&count='+count;
     console.log(url);
     xhr.open('GET', url, true);
     xhr.send();

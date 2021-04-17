@@ -92,16 +92,20 @@
 }
 
 .error-message {
+    position: fixed;
     width: 500px;
-
-    font-family: 'Comfortaa', sans-serif;
-
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
+    top: 100px;
+    left: 0;
+    right: 0;
+    font-family: 'Comfortaa', sans-serif;
 }
 
 .background-white-error {
+    border: #e22b2b 4px solid;
+    border-radius: 10px;
     background-color: white;
     padding: 10px 10px 10px 10px;
 }

@@ -2,7 +2,6 @@ package by.bsu.smarttape.utils.services;
 
 import by.bsu.smarttape.forms.UserUpdateForm;
 import by.bsu.smarttape.models.User;
-import by.bsu.smarttape.utils.results.UserRegistrationStatus;
 import by.bsu.smarttape.utils.results.UserUpdateStatus;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
