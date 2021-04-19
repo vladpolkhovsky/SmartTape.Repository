@@ -1,6 +1,7 @@
 package by.bsu.smarttape.utils.services;
 
 import by.bsu.smarttape.forms.UserUpdateForm;
+import by.bsu.smarttape.models.Package;
 import by.bsu.smarttape.models.User;
 import by.bsu.smarttape.utils.results.UserUpdateStatus;
 import org.hibernate.HibernateException;
@@ -178,6 +179,24 @@ public class UserService {
             List<User> userList = query.getResultList();
             userFindSession.close();
             return (userList.size() > 0 ? userList.get(0) : null);
+        } catch (HibernateException ex) {
+            System.err.println(ex);
+            return null;
+        }
+    }
+
+    public static Package[] getUserPackages(User user) {
+        try {
+            Session userFindSession = DataBaseSessionService.getSession();
+            CriteriaBuilder criteriaBuilder = userFindSession.getCriteriaBuilder();
+            CriteriaQuery<Package> criteriaQuery = criteriaBuilder.createQuery(Package.class);
+            Root<Package> pRoot = criteriaQuery.from(Package.class);
+            criteriaQuery.select(pRoot)
+                    .where(criteriaBuilder.equal(pRoot.get("ownerID"), user.getId()));
+            TypedQuery<Package> query = userFindSession.createQuery(criteriaQuery);
+            List<Package> userList = query.getResultList();
+            userFindSession.close();
+            return userList.toArray(new Package[0]);
         } catch (HibernateException ex) {
             System.err.println(ex);
             return null;
