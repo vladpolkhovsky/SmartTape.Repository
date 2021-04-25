@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8">
+        <title>Пакеты</title>
+        <link th:href="@{/static/styles/registration-style.css}" rel="stylesheet">
+        <link th:href="@{/static/styles/feed-style.css}" rel="stylesheet">
+        <link th:href="@{/static/styles/profile-style.css}" rel="stylesheet">
+        <link th:href="@{/static/styles/package-style.css}" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&display=swap" rel="stylesheet">
+    </head>
+    <body>
+    <header>
+        <div class="header-main">
+            <h1 class="logo center"><a href="/nl-feed">УМНАЯ ЛЕНТА</a></h1>
+            <input autofocus id="search" class="search-line center" type="text" autocomplete="off" placeholder="Поиск в Умной Ленте">
+            <nav class="buttons-area">
+                <div class="button active">
+                    <h2><a href="/nl-feed?package=trends" >ПОПУЛЯРНОЕ</a></h2>
+                </div>
+            </nav>
+            <nav class="buttons-area">
+                <div class="button">
+                    <h2><a href="/nl-feed?package=general" >МОЯ ЛЕНТА</a></h2>
+                </div>
+            </nav>
+        </div>
+        <div class="header-user-area">
+            <a class="functional-button">Valentin</a>
+            <div class="click-options">
+                <div class="left-border">
+                    <a class="click-option" href="/control-panel/profile-settings">Настройки</a>
+                    <a class="click-option" href="/logout">Выход</a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="package-settings" >
+        <script>
+            let linksArea;
+
+            const init = function () {
+                linksArea = document.getElementById("links");
+            }
+            //link-id=1+package-id=1:
+
+            const createLink = function() {
+                let element = document.createElement("input");
+                linksArea.appendChild(element)
+                element.value = "new.com";
+                element.name = "0+1";
+            }
+
+            const showLinks = function(){
+                let element = document.createElement("p");
+                // package.appendChild(element);
+                element.value = "dijf";
+                element.name = "k;"
+            }
+        </script>
+        <h1 class="block-header tabbed">
+            Менеджер пакетов
+        </h1>
+        <div class="background-white-package package-block">
+            <div class="block l-package">
+                <div class="my-packgae">
+                    <h2 class="block-header tabbed">
+                        Мои пакеты
+                    </h2>
+                    <div class="my-package-list">
+                        <form name="add" action="#" th:action="@{/settings/package}" method="post">
+                            <ul>
+                                <th:block th:each="package : ${packages}">
+                                    <li onclick="showLinks()" th:utext="${package.getId()}">..</li>
+                                </th:block>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="vertical-rule">
+
+<!--                <form name="add" action="/settings/package" method="get">-->
+<!--                    -->
+<!--                    <input type="text" th:name="'User' + |${user.getUserName()}|" th:value="|${user.getUserName()}|" />-->
+<!--                    <p></p>-->
+<!--                    <p><input type="submit" value="Submit" /> </p>-->
+<!--                </form>-->
+            </div>
+            <div class="block r-package">
+                <h2 class="block-header tabbed">
+                    Пакет “<span class="p-name">Владислав Полховский</span>”
+                    <form name="add" action="#" th:action="@{/settings/package}" method="post">
+                        <ul>
+                            <th:block id="package" th:each="package : ${packages}">
+<!--                                <li th:utext="${package.getId()}">..</li>-->
+                                <th:block th:each="link : ${package.getLinks()}">
+                                    <li>
+                                        <input type="input" th:name="|${link.getId()}| + |+| + |${package.getId()}|" th:value="|${link.getUrlAddress()}|" ></input>
+                                        <input id="hideButton" type="button" value="Скрыть"/>
+                                        <input id="deleteButton" type="button" value="Удалить"/>
+                                        <script>
+                                            let hideButton = document.getElementById("hideButton");
+                                            let deleteButton = document.getElementById("deleteButton");
+
+                                            deleteButton.addEventListener("click", deleteLink);
+
+                                            async function deleteLink(){
+                                                deleteButton.value = "дар"
+                                            }
+                                        </script>
+                                    </li>
+                                </th:block>
+                            </th:block>
+                            <div id="links">
+
+                            </div>
+                        </ul>
+                        <a onclick="createLink()">Добавить ссылку</a>
+                        <input type="submit" value="Добавить"/>
+                    </form>
+                </h2> 
+            </div>
+        </div>
+    </div>
+    <script>
+        init();
+    </script>
+    </body>
+</html>

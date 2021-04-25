@@ -14,6 +14,7 @@ public class Link {
     private long id;
     private long packageId;
     private String urlAddress;
+    private boolean isHidden = false;
 
     public Link(String url, long packageId) {
         this.packageId = packageId;
@@ -56,4 +57,11 @@ public class Link {
         return SocialNetwork.vk;
     }
 
+    public boolean isHidden() {
+        return isHidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        isHidden = hidden;
+    }
 }

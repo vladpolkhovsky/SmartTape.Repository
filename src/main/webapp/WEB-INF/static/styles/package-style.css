@@ -1,0 +1,68 @@
+.package-settings {
+    width: 90%;
+    min-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.package-block {
+    height: 600px;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.background-white-package {
+    background-color: white;
+}
+
+.vertical-rule {
+    background-color: #595959;
+    border-radius: 1px;
+    width: 3px;
+    height: 95%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.l-package {
+    width: 29%;
+}
+
+.r-package {
+    width: 69%;
+}
+
+.my-package-list-items {
+    height: 400px;
+    overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+  
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 3px lightgray;
+    border-radius: 10px;
+}
+  
+::-webkit-scrollbar-thumb {
+    background: gray;
+    border-radius: 10px;
+}
+
+li {
+    font-family: 'Comfortaa', sans-serif;
+    font-weight: normal;
+}
+
+.p-name {
+    letter-spacing: 1px;
+}
+
+.active {
+    color: blueviolet;
+    font-weight: bold;
+}
