@@ -193,13 +193,13 @@ header {
 
     visibility: hidden;
 
-    justify-content: flex-end;
+    justify-content: center;
 
     top: 0;
     width: 150px;
     right: 25px;
 
-    height: 120px;
+    height: 200px;
 
     font-family: 'Comfortaa', sans-serif;
 

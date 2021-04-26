@@ -15,26 +15,33 @@
     <header>
         <div class="header-main">
             <h1 class="logo center"><a href="/nl-feed">УМНАЯ ЛЕНТА</a></h1>
-            <input autofocus id="search" class="search-line center" type="text" autocomplete="off" placeholder="Поиск в Умной Ленте">
-            <nav class="buttons-area">
-                <div class="button active">
-                    <h2><a href="/nl-feed?package=trends" >ПОПУЛЯРНОЕ</a></h2>
-                </div>
-            </nav>
-            <nav class="buttons-area">
-                <div class="button">
-                    <h2><a href="/nl-feed?package=general" >МОЯ ЛЕНТА</a></h2>
+            <input th:if="${header.isShowNav()}" id="search" class="search-line center" type="text" autocomplete="off" placeholder="Поиск в Умной Ленте">
+            <nav th:if="${header.isShowNav()}" class="buttons-area" th:each="button: ${header.getButtons()}">
+                <div class="button" th:classappend="${button.isActive() == true ? 'active' : ''}">
+                    <h2><a th:href="${button.getLink()}" th:text="${button.getName()}" /></h2>
                 </div>
             </nav>
         </div>
-        <div class="header-user-area">
-            <a class="functional-button">Valentin</a>
-            <div class="click-options">
+        <div th:if="${header.isShowNav()}" class="header-user-area">
+
+            <a th:if="${header.isEntered()}" class="functional-button" th:text="${header.getUser().getUserName()}">
+                vlad.polkhovsky
+            </a>
+
+            <div th:if="${header.isEntered()}" class="click-options">
                 <div class="left-border">
                     <a class="click-option" href="/control-panel/profile-settings">Настройки</a>
                     <a class="click-option" href="/logout">Выход</a>
                 </div>
             </div>
+
+            <a th:if="${!header.isEntered()}" class="functional-button" href="/registration-form">
+                <span class="login-button">
+                    ВХОД
+                    <img src="https://www.vseprosport.ru/images/user/default.png" />
+                </span>
+            </a>
+
         </div>
     </header>
     <div class="package-settings">

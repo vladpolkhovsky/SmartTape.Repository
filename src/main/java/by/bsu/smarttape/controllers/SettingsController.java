@@ -26,16 +26,9 @@ public class SettingsController {
     @GetMapping("/")
     public String settingWork(Model model,
                               HttpServletRequest request){
-        //User user = ActiveSessionService.getUserBySession(request.getSession());
-//        User user = new User("Nasia", "kuk@c.d", "password");
-//        model.addAttribute("user", user);
-        //Package[] packages = UserService.getUserPackages(user);
-
-        PackageService basicPackageService = BasicPackageService.getInstance();
-        PackageStatus packageStatus1 = basicPackageService.getPackage(1);
-        PackageStatus packageStatus2 = basicPackageService.getPackage(2);
-        Package[] packages = {packageStatus1.getPackage(), packageStatus2.getPackage()};
-        model.addAttribute("packages", packages);
+        User user = ActiveSessionService.getUserBySession(request.getSession());
+        HeaderModel header = HeaderModel.getInstance(user, false);
+        model.addAttribute("header", header);
         return "views/settings/package";
     }
 
@@ -102,7 +95,7 @@ public class SettingsController {
     }
 
     @PostMapping("/package")
-    public RedirectView updater(HttpServletRequest request) {
+    public RedirectView updater(Model model, HttpServletRequest request) {
         User user = ActiveSessionService.getUserBySession(request.getSession());
         request.getParameterMap().forEach((x, y) -> {
             System.out.println(x + ":" + Arrays.toString(y));
