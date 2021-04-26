@@ -37,29 +37,7 @@
             </div>
         </div>
     </header>
-    <div class="package-settings" >
-        <script>
-            let linksArea;
-
-            const init = function () {
-                linksArea = document.getElementById("links");
-            }
-            //link-id=1+package-id=1:
-
-            const createLink = function() {
-                let element = document.createElement("input");
-                linksArea.appendChild(element)
-                element.value = "new.com";
-                element.name = "0+1";
-            }
-
-            const showLinks = function(){
-                let element = document.createElement("p");
-                // package.appendChild(element);
-                element.value = "dijf";
-                element.name = "k;"
-            }
-        </script>
+    <div class="package-settings">
         <h1 class="block-header tabbed">
             Менеджер пакетов
         </h1>
@@ -70,63 +48,36 @@
                         Мои пакеты
                     </h2>
                     <div class="my-package-list">
-                        <form name="add" action="#" th:action="@{/settings/package}" method="post">
-                            <ul>
-                                <th:block th:each="package : ${packages}">
-                                    <li onclick="showLinks()" th:utext="${package.getId()}">..</li>
-                                </th:block>
-                            </ul>
-                        </form>
+                        <ul id="pList" class="my-package-list-items">
+                        </ul>
                     </div>
                 </div>
             </div>
-            <div class="vertical-rule">
-
-<!--                <form name="add" action="/settings/package" method="get">-->
-<!--                    -->
-<!--                    <input type="text" th:name="'User' + |${user.getUserName()}|" th:value="|${user.getUserName()}|" />-->
-<!--                    <p></p>-->
-<!--                    <p><input type="submit" value="Submit" /> </p>-->
-<!--                </form>-->
-            </div>
+            <div class="vertical-rule"></div>
             <div class="block r-package">
                 <h2 class="block-header tabbed">
-                    Пакет “<span class="p-name">Владислав Полховский</span>”
-                    <form name="add" action="#" th:action="@{/settings/package}" method="post">
-                        <ul>
-                            <th:block id="package" th:each="package : ${packages}">
-<!--                                <li th:utext="${package.getId()}">..</li>-->
-                                <th:block th:each="link : ${package.getLinks()}">
-                                    <li>
-                                        <input type="input" th:name="|${link.getId()}| + |+| + |${package.getId()}|" th:value="|${link.getUrlAddress()}|" ></input>
-                                        <input id="hideButton" type="button" value="Скрыть"/>
-                                        <input id="deleteButton" type="button" value="Удалить"/>
-                                        <script>
-                                            let hideButton = document.getElementById("hideButton");
-                                            let deleteButton = document.getElementById("deleteButton");
-
-                                            deleteButton.addEventListener("click", deleteLink);
-
-                                            async function deleteLink(){
-                                                deleteButton.value = "дар"
-                                            }
-                                        </script>
-                                    </li>
-                                </th:block>
-                            </th:block>
-                            <div id="links">
-
+                    Пакет “<span id="pName" class="p-name">Loading</span>”
+                </h2>
+                <div id="package-info-area">
+                    <form action="/settings/package" method="POST">
+                        <div class="name-area">
+                            <p>Изменить название:</p> <input id="name-area" type="text">
+                        </div>
+                        <h3 class="links-font tabbed">Зависимые ссылки</h3>
+                            <div class="nav-bar">
+                                <ul id="pLinksList" class="my-package-list-items">
+                                    <li><input type="text"><input type="checkbox"></li>
+                                </ul>
+                                <div class="form-buttons">
+                                    <a class="st-button" onclick="addNewLink()">Добавить</a>
+                                    <input class="st-button" type="submit" value="Сохранить" />
+                                </div>
                             </div>
-                        </ul>
-                        <a onclick="createLink()">Добавить ссылку</a>
-                        <input type="submit" value="Добавить"/>
                     </form>
-                </h2> 
+                </div>
             </div>
         </div>
     </div>
-    <script>
-        init();
-    </script>
+    <script th:src="@{/static/scripts/settings-script.js}"></script>
     </body>
 </html>

@@ -119,8 +119,9 @@ public class BasicPackageService implements PackageService {
 
     @Override
     public PackageStatus updatePackage(Package updPackage) {
-
         Exception ex = DataBaseSessionService.safetyOperation(session -> {
+            session.evict(updPackage);
+            session.update(updPackage);
            for (Link link : updPackage.getLinks()) {
                if (link.getId() < 0)
                    delLink(session, link);
@@ -130,7 +131,6 @@ public class BasicPackageService implements PackageService {
                    updLink(session, link);
            }
         });
-
         if (ex != null) {
             return new PackageStatus(
                     SimpleStatus.ERROR,
@@ -145,6 +145,7 @@ public class BasicPackageService implements PackageService {
                 BasicPackageService.getInstance().getPackage(updPackage.getId()).getPackage()
         );
     }
+
     private void updLink(Session session, Link link) {
         session.evict(link);
         session.update(link);

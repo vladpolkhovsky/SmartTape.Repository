@@ -1,6 +1,8 @@
 package by.bsu.smarttape.controllers;
 
 import by.bsu.smarttape.models.Link;
+import by.bsu.smarttape.models.Package;
+import by.bsu.smarttape.models.User;
 import by.bsu.smarttape.models.social.Attachment;
 import by.bsu.smarttape.models.social.Post;
 import by.bsu.smarttape.utils.results.PackageStatus;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -34,6 +37,53 @@ public class ApiController {
         jsonObject.addProperty("user_name", userName);
         jsonObject.addProperty("already_exists", result);
         return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/packages-data", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> checkUserNameForUniq(HttpServletRequest request) throws IOException {
+        User cUser = UserService.getUserByUserNameAndPassword("vlad.polkhovsky", "vlad.polkhovsky");
+        JsonObject jsonObject = new JsonObject();
+        if (cUser != null) {
+            jsonObject.add("response", createResponse(cUser));
+        } else {
+            jsonObject.addProperty("error", "Время сессии истекло.");
+        }
+        return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
+    }
+
+    private JsonArray createResponse(User cUser) {
+        Package[] packages = UserService.getUserPackages(cUser);
+        for (Package aPackage : packages) {
+            aPackage.setLinks(BasicPackageService.getInstance().getPackage(aPackage.getId()).getPackage().getLinks());
+        }
+        System.out.println(Arrays.toString(packages));
+        JsonArray jsonArray = new JsonArray();
+        try {
+            for (Package aPackage : packages)
+                jsonArray.add(createElement(aPackage));
+        } catch (NullPointerException ignored) {
+            System.err.println(ignored.getMessage());
+        }
+        return jsonArray;
+    }
+
+    private JsonObject createElement(Package aPackage) {
+        JsonObject jsonObject = new JsonObject();
+        JsonArray jsonArray = new JsonArray();
+        jsonObject.addProperty("name", aPackage.getName());
+        jsonObject.addProperty("id", aPackage.getId());
+        System.out.println(aPackage.getName());
+        aPackage.getLinks().forEach(x -> {
+            JsonObject object = new JsonObject();
+            object.addProperty("lid", x.getId());
+            object.addProperty("pid", x.getPackageId());
+            object.addProperty("url", x.getUrlAddress());
+            object.addProperty("hidden", x.isHidden());
+            System.out.println(object);
+            jsonArray.add(object);
+        });
+        jsonObject.add("links", jsonArray);
+        return jsonObject;
     }
 
     int basePackageId = 1;

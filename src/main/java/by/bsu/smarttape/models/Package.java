@@ -14,9 +14,12 @@ public class Package {
 
     private long ownerID;
 
-    public Package(List<Link> links, long ownerID) {
+    private String name;
+
+    public Package(List<Link> links, long ownerID, String name) {
         this.links = links;
         this.ownerID = ownerID;
+        this.name = name;
     }
 
     public Package() {
@@ -47,6 +50,15 @@ public class Package {
     @Column(unique = false)
     public long getOwnerID() {
         return ownerID;
+    }
+
+    @Column(unique = false, length = 100)
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setOwnerID(long ownerID) {
