@@ -44,7 +44,14 @@
 
         </div>
     </header>
-    <div class="package-settings">
+    <div id="errorArea" class="error-message" style="display: none;" >
+        <div class="background-white-error">
+            <h1 class="tabbed">Произошла ошибка &#128534;</h1>
+            <p id="errorMessage"></p>
+            <a class="st-button tabbed" href="/nl-feed">Назад</a>
+        </div>
+    </div>
+    <div id="settings-area" class="package-settings" style="display: none">
         <h1 class="block-header tabbed">
             Менеджер пакетов
         </h1>
@@ -57,6 +64,7 @@
                     <div class="my-package-list">
                         <ul id="pList" class="my-package-list-items">
                         </ul>
+                        <a class="st-button tabbed" onclick="createNewPackage()">Новый пакет </a>
                     </div>
                 </div>
             </div>
@@ -72,8 +80,7 @@
                         </div>
                         <h3 class="links-font tabbed">Зависимые ссылки</h3>
                             <div class="nav-bar">
-                                <ul id="pLinksList" class="my-package-list-items">
-                                    <li><input type="text"><input type="checkbox"></li>
+                                <ul id="pLinksList" class="my-package-list-items-r">
                                 </ul>
                                 <div class="form-buttons">
                                     <a class="st-button" onclick="addNewLink()">Добавить</a>

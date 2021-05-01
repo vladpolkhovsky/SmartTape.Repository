@@ -16,9 +16,11 @@ function getPackagesInfo() {
         let result = JSON.parse(xhr.responseText);
         console.log(result)
         console.log(result.error)
-        if (result.error != undefined)
+        if (result.error != undefined) {
+            document.getElementById("settings-area").style.display = "none";
             showError(result.error);
-        else {
+        } else {
+            document.getElementById("settings-area").style.display = "block";
             packageResponce = result.response;
             displayPackages(result.response);
         }
@@ -113,7 +115,7 @@ function displayPackages(pArray) {
         let package = pArray[indx];
         let cLiItem = document.createElement("li");
         pListUl.appendChild(cLiItem);
-        cLiItem.innerHTML = createClickablePackage(package.name, package.id, indx == 0);
+        cLiItem.innerHTML = createClickablePackage(package.name, package.id, indx === 0);
         if (indx == 0) {
             oldSelected = package.id;
             select(package.id);
@@ -134,16 +136,28 @@ function showError(msg) {
 function addNewLink() {
     for (let i = 0; i < packageResponce.length; i++) {
         if (packageResponce[i].id === oldSelected) {
-            packageResponce[i].links.push({
+            let newLink = {
                 "pid": packageResponce[i].id,
                 "lid": 0,
                 "url": "vk.com/",
                 "hidden": false
-            });
-            select(oldSelected);
+            };
+            packageResponce[i].links.push(
+                newLink
+            );
+            createLink(newLink);
             break;
         }
     }
+}
+
+function createNewPackage() {
+    let xhr = new XMLHttpRequest();
+    let url = '/api/create-new-package';
+    console.log(url);
+    xhr.open('GET', url, false);
+    xhr.send();
+    document.location.reload();
 }
 
 getPackagesInfo();

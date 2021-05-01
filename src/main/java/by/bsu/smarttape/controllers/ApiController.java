@@ -6,6 +6,8 @@ import by.bsu.smarttape.models.User;
 import by.bsu.smarttape.models.social.Attachment;
 import by.bsu.smarttape.models.social.Post;
 import by.bsu.smarttape.utils.results.PackageStatus;
+import by.bsu.smarttape.utils.results.SimpleStatus;
+import by.bsu.smarttape.utils.services.ActiveSessionService;
 import by.bsu.smarttape.utils.services.BasicPackageService;
 import by.bsu.smarttape.utils.services.UserService;
 import by.bsu.smarttape.utils.services.social.VKParser;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -29,6 +32,22 @@ import java.util.*;
 @Controller
 @RequestMapping(value = "/api")
 public class ApiController {
+
+    @GetMapping(value = "/create-new-package")
+    public RedirectView createNewPackage(HttpServletRequest request) throws IOException {
+        User user = ActiveSessionService.getUserBySession(request.getSession());
+        if (user != null) {
+            PackageStatus status = BasicPackageService.getInstance().savePackage(new Package(
+                    new ArrayList<>(),
+                    user.getId(),
+                    "Новый пакет."
+            ));
+            if (status.getCode() == SimpleStatus.OK) {
+                System.out.println("OK");
+            }
+        }
+        return new RedirectView("/settings/");
+    }
 
     @GetMapping(value = "/user-name-checker", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> checkUserNameForUniq(@RequestParam("user-name") String userName) throws IOException {
@@ -41,7 +60,7 @@ public class ApiController {
 
     @GetMapping(value = "/packages-data", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> checkUserNameForUniq(HttpServletRequest request) throws IOException {
-        User cUser = UserService.getUserByUserNameAndPassword("vlad.polkhovsky", "vlad.polkhovsky");
+        User cUser = ActiveSessionService.getUserBySession(request.getSession());
         JsonObject jsonObject = new JsonObject();
         if (cUser != null) {
             jsonObject.add("response", createResponse(cUser));
@@ -53,12 +72,14 @@ public class ApiController {
 
     private JsonArray createResponse(User cUser) {
         Package[] packages = UserService.getUserPackages(cUser);
+        assert packages != null;
         for (Package aPackage : packages) {
             aPackage.setLinks(BasicPackageService.getInstance().getPackage(aPackage.getId()).getPackage().getLinks());
         }
         System.out.println(Arrays.toString(packages));
         JsonArray jsonArray = new JsonArray();
         try {
+            packages = Arrays.stream(packages).sorted((a, b) -> Long.compare(a.getId(), b.getId())).toArray(Package[]::new);
             for (Package aPackage : packages)
                 jsonArray.add(createElement(aPackage));
         } catch (NullPointerException ignored) {
@@ -85,8 +106,6 @@ public class ApiController {
         jsonObject.add("links", jsonArray);
         return jsonObject;
     }
-
-    int basePackageId = 1;
 
     @GetMapping(value = "/posts", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getPost(
@@ -145,7 +164,7 @@ public class ApiController {
     }
 
     private String timeBeautifier(long time) {
-        java.util.Date dateTime = new java.util.Date((long)time*1000);
+        java.util.Date dateTime = new java.util.Date((long)((24 * 60 * 60 + time) * 1000));
         Locale locale = new Locale("ru");
         SimpleDateFormat df = new SimpleDateFormat("dd MMM yyyy HH:mm",locale);
         return df.format(dateTime);
