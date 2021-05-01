@@ -1,5 +1,6 @@
 package by.bsu.smarttape.utils.services.social;
 
+import by.bsu.smarttape.models.Package;
 import by.bsu.smarttape.models.social.Attachment;
 import by.bsu.smarttape.models.social.Post;
 import by.bsu.smarttape.models.social.PostVK;
@@ -92,7 +93,7 @@ public class VKParser implements SocialParser {
         return vkApiClient.wall().get(serviceActor);
     }
 
-    private void parse(int start, int limit) throws ParserException {
+    private void parse(int start, int limit, Package aPackage) throws ParserException {
         try {
             String wallQuery = getWallGetQuery()
                     .ownerId(id)
@@ -100,13 +101,13 @@ public class VKParser implements SocialParser {
                     .count(limit)
                     .filter(WallFilter.OWNER)
                     .executeAsString();
-            list.addAll(parsePosts(wallQuery));
+            list.addAll(parsePosts(wallQuery, aPackage));
         } catch (Exception exception) {
             throw new ParserException(exception.getMessage());
         }
     }
 
-    private List<Post> parsePosts(String wallQuery) {
+    private List<Post> parsePosts(String wallQuery, Package aPackage) {
         JsonObject response = JsonParser.parseString(wallQuery)
                 .getAsJsonObject()
                 .get("response")
@@ -115,7 +116,7 @@ public class VKParser implements SocialParser {
         JsonArray items = response.get("items").isJsonNull() ?
                 new JsonArray() : response.get("items").getAsJsonArray();
         List<Post> posts = new ArrayList<>();
-        items.forEach((item) -> posts.add(parsePost(item, headerUrl)));
+        items.forEach((item) -> posts.add(parsePost(item, headerUrl, aPackage)));
         return posts;
     }
 
@@ -159,7 +160,7 @@ public class VKParser implements SocialParser {
         }
     }
 
-    private Post parsePost(JsonElement item, String profileUrl) {
+    private Post parsePost(JsonElement item, String profileUrl, Package aPackage) {
         String text = item.getAsJsonObject().get("text").getAsString();
         long time = item.getAsJsonObject().get("date").getAsLong();
         List<Attachment> attachments = new ArrayList<>();
@@ -170,7 +171,7 @@ public class VKParser implements SocialParser {
                 JsonElement element = getRepostOwner(item);
                 if (element == null)
                     System.out.println(item);
-                return parsePost(element, getHeaderUrl());
+                return parsePost(element, getHeaderUrl(), aPackage);
             } else {
                 if (item.getAsJsonObject().get("attachments") != null) {
                     item.getAsJsonObject().get("attachments").getAsJsonArray().forEach((x) -> {
@@ -189,7 +190,8 @@ public class VKParser implements SocialParser {
                 "VK",
                 text,
                 attachments,
-                time
+                time,
+                aPackage
         );
     }
 
@@ -229,10 +231,10 @@ public class VKParser implements SocialParser {
     }
 
     @Override
-    public List<Post> getPosts(int start, int limit) {
+    public List<Post> getPosts(int start, int limit, Package aPackage) {
         list.clear();
         try {
-            parse(start, limit);
+            parse(start, limit, aPackage);
         } catch (ParserException e) {
             e.printStackTrace();
             return new ArrayList<>();

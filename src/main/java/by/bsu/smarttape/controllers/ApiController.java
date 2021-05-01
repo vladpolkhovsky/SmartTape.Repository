@@ -131,7 +131,7 @@ public class ApiController {
             for (Link link : basePackage.getPackage().getLinks()) {
                 try {
                     if (!link.isHidden())
-                        postList.addAll(VKParser.getInstance(link.getUrlAddress()).getPosts(offset * count, count));
+                        postList.addAll(VKParser.getInstance(link.getUrlAddress()).getPosts(offset * count, count, basePackage.getPackage()));
                 } catch (ParserException e) {
                     System.err.println(e.getMessage());
                 }
@@ -143,7 +143,7 @@ public class ApiController {
             JsonArray postArray = new JsonArray();
 
             for (Post post : postList) {
-                parsePostToJson(post, postArray);
+                parsePostToJson(post, String.valueOf(id), postArray);
             }
 
             jsonObject.add("response", postArray);
@@ -167,7 +167,7 @@ public class ApiController {
                     for (Link link : links) {
                         try {
                             if (!link.isHidden())
-                                postList.addAll(VKParser.getInstance(link.getUrlAddress()).getPosts(offset * count, count));
+                                postList.addAll(VKParser.getInstance(link.getUrlAddress()).getPosts(offset * count, count, aPackage));
                         } catch (ParserException e) {
                             System.err.println(e.getMessage());
                         }
@@ -182,7 +182,7 @@ public class ApiController {
                     : postList.stream()
                     .sorted((o1, o2) -> -Long.compare(o1.getTime(), o2.getTime()))
                     .collect(Collectors.toList())) {
-                parsePostToJson(post, postArray);
+                parsePostToJson(post, String.valueOf(id), postArray);
             }
 
             jsonObject.add("response", postArray);
@@ -193,14 +193,15 @@ public class ApiController {
 
     }
 
-    private void parsePostToJson(Post post, JsonArray postArray) {
+    private void parsePostToJson(Post post, String pId, JsonArray postArray) {
         JsonObject postJson = new JsonObject();
         postJson.addProperty("header_tittle", post.getHeaderTittle());
         postJson.addProperty("header_url", post.getHeaderImageUrl());
         postJson.addProperty("header_short_name", post.getShortName());
         postJson.addProperty("description", post.getDescription());
         postJson.addProperty("time", timeBeautifier(post.getTime()));
-        postJson.addProperty("package_name", "Больше в пакете Популярное.");
+        Package aPackage = post.getPackage();
+        postJson.addProperty("package_name", aPackage == null ? "Популярное в ленте" : "Пакет \"" + aPackage.getName() + "\""); //TODO Название пакетов!!!.
         postJson.add("attachments", parseAttachments(post.getAttachmentList()));
         postArray.add(postJson);
     }

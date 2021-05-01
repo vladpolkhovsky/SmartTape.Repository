@@ -40,6 +40,8 @@ function getNewPosts() {
 }
 
 async function createPost(element) {
+    if (element.attachments.length === 0 && element.description.length === 0)
+        return;
     console.log(element.header_short_name)
     let postDiv = feed_center.appendChild(document.createElement("div"));
     postDiv.classList.add("post");
