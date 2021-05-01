@@ -47,19 +47,18 @@
         </div>
     </div>
     <div class="feed-center">
+        <div class="center" style="position: fixed;">
         <th:block th:if="${packages != null}">
             <div class="selector">
                 <h3 class="tabbed">Выбор пакета</h3>
-                <ul>
+                <ul class="pList">
                     <th:block th:each="package : ${packages}">
                         <li class="selected"><a th:href="|/nl-feed?pID=| + |${package.getId()}|" th:text="${package.getName()}"></a></li>
                     </th:block>
                 </ul>
             </div>
-            <div class="selector-hidden">
-                <h3 class="tabbed">Открыть фильтры.</h3>
-            </div>
         </th:block>
+        </div>
     </div>
     <div class="load">
         <img src="https://www.kadrtour.com/kadr_tour/public/img/fancybox_loading2.gif" />

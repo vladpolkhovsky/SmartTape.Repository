@@ -1,8 +1,10 @@
 body {
     margin: 0;
 }
-
 header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
     display: flex;
     justify-content: space-between;
 
@@ -257,20 +259,34 @@ header {
 
 .selector {
     font-family: 'Comfortaa', sans-serif;
-    /* position: sticky; */
-    left: -100px;
-    top: 100px;
-    background-color: white;
-    border-radius: 10px;
-    border: blueviolet 2px solid ;
+    position: relative;
+    top: 0px;
+    left: -260px;
 }
 
-.selector-hidden {
-    font-family: 'Comfortaa', sans-serif;
-    /* position: sticky; */
-    left: -100px;
-    top: 100px;
-    background-color: white;
+.pList {
+    max-width: 400px;
+    width: 200px;
+    overflow-y: scroll;
+    list-style-type: none;
+    border-left: black solid;
+    padding: 10px;
+}
+
+.pList li a {
+    color: inherit;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 3px lightgray;
     border-radius: 10px;
-    border: blueviolet 2px solid ;
+}
+
+::-webkit-scrollbar-thumb {
+    background: gray;
+    border-radius: 10px;
 }
