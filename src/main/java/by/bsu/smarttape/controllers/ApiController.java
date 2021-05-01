@@ -111,12 +111,19 @@ public class ApiController {
     public ResponseEntity<String> getPost(
             @RequestParam("package-id") long id,
             @RequestParam("offset") int offset,
-            @RequestParam("count") int count
+            @RequestParam("count") int count,
+            HttpServletRequest request
         ) {
 
         PackageStatus basePackage = BasicPackageService.getInstance().getPackage(id);
 
         List<Post> postList = new ArrayList<>();
+
+        User user = ActiveSessionService.getUserBySession(request.getSession());
+
+        if (user == null || basePackage.getPackage().getOwnerID() != user.getId()) {
+            basePackage = BasicPackageService.getInstance().getPackage(BasicPackageService.NON_LOGON_PACKAGE);
+        }
 
         for (Link link : basePackage.getPackage().getLinks()) {
             try {

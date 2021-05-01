@@ -16,6 +16,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class BasicPackageService implements PackageService {
 
+    public static final long NON_LOGON_PACKAGE = 0;
+
     private static PackageService service = null;
 
     private BasicPackageService() {

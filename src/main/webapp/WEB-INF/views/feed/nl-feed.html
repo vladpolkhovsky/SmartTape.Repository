@@ -22,11 +22,9 @@
             </nav>
         </div>
         <div th:if="${header.isShowNav()}" class="header-user-area">
-
             <a th:if="${header.isEntered()}" class="functional-button" th:text="${header.getUser().getUserName()}">
                 vlad.polkhovsky
             </a>
-
             <div th:if="${header.isEntered()}" class="click-options">
                 <div class="left-border">
                     <a class="click-option" href="/control-panel/profile-settings">Настройки</a>
@@ -34,14 +32,12 @@
                     <a class="click-option" href="/logout">Выход</a>
                 </div>
             </div>
-
             <a th:if="${!header.isEntered()}" class="functional-button" href="/registration-form">
                 <span class="login-button">
                     ВХОД
                     <img src="https://www.vseprosport.ru/images/user/default.png" />
                 </span>
             </a>
-
         </div>
     </header>
     <div class="error-message" th:if="${exception != null}">
@@ -51,7 +47,19 @@
         </div>
     </div>
     <div class="feed-center">
-
+        <th:block th:if="${packages != null}">
+            <div class="selector">
+                <h3 class="tabbed">Выбор пакета</h3>
+                <ul>
+                    <th:block th:each="package : ${packages}">
+                        <li class="selected"><a th:href="|/nl-feed?pID=| + |${package.getId()}|" th:text="${package.getName()}"></a></li>
+                    </th:block>
+                </ul>
+            </div>
+            <div class="selector-hidden">
+                <h3 class="tabbed">Открыть фильтры.</h3>
+            </div>
+        </th:block>
     </div>
     <div class="load">
         <img src="https://www.kadrtour.com/kadr_tour/public/img/fancybox_loading2.gif" />

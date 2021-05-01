@@ -253,3 +253,24 @@ header {
     text-align: center;
     font-family: 'Comfortaa', sans-serif;
 }
+
+
+.selector {
+    font-family: 'Comfortaa', sans-serif;
+    /* position: sticky; */
+    left: -100px;
+    top: 100px;
+    background-color: white;
+    border-radius: 10px;
+    border: blueviolet 2px solid ;
+}
+
+.selector-hidden {
+    font-family: 'Comfortaa', sans-serif;
+    /* position: sticky; */
+    left: -100px;
+    top: 100px;
+    background-color: white;
+    border-radius: 10px;
+    border: blueviolet 2px solid ;
+}
