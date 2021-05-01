@@ -10,10 +10,16 @@ const queryString = window.location.search;
 console.log(queryString);
 
 const urlParams = new URLSearchParams(queryString);
+
 let pId = urlParams.get('pID')
+
+let isGeneral = urlParams.get("package")
 
 if (pId !== null)
     id = pId;
+
+if (isGeneral !== null)
+    id = -1
 
 function getNewPosts() {
     block = true;

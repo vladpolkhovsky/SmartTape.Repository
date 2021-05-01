@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/api")
@@ -115,36 +116,81 @@ public class ApiController {
             HttpServletRequest request
         ) {
 
-        PackageStatus basePackage = BasicPackageService.getInstance().getPackage(id);
-
-        List<Post> postList = new ArrayList<>();
-
         User user = ActiveSessionService.getUserBySession(request.getSession());
 
-        if (user == null || basePackage.getPackage().getOwnerID() != user.getId()) {
-            basePackage = BasicPackageService.getInstance().getPackage(BasicPackageService.NON_LOGON_PACKAGE);
-        }
+        if (id != -1) {
 
-        for (Link link : basePackage.getPackage().getLinks()) {
-            try {
-                postList.addAll(VKParser.getInstance(link.getUrlAddress()).getPosts(offset * count, count));
-            } catch (ParserException e) {
-                System.err.println(e.getMessage());
+            PackageStatus basePackage = BasicPackageService.getInstance().getPackage(id);
+
+            List<Post> postList = new ArrayList<>();
+
+            if (user == null || basePackage.getPackage().getOwnerID() != user.getId()) {
+                basePackage = BasicPackageService.getInstance().getPackage(BasicPackageService.NON_LOGON_PACKAGE);
             }
+
+            for (Link link : basePackage.getPackage().getLinks()) {
+                try {
+                    if (!link.isHidden())
+                        postList.addAll(VKParser.getInstance(link.getUrlAddress()).getPosts(offset * count, count));
+                } catch (ParserException e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+
+            postList.sort(Comparator.comparingLong(Post::getTime).reversed());
+
+            JsonObject jsonObject = new JsonObject();
+            JsonArray postArray = new JsonArray();
+
+            for (Post post : postList) {
+                parsePostToJson(post, postArray);
+            }
+
+            jsonObject.add("response", postArray);
+
+            return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
+
+        } else {
+
+            PackageStatus basePackage;
+
+            List <Post> postList = new ArrayList<>();
+
+            basePackage = BasicPackageService.getInstance().getPackage(BasicPackageService.NON_LOGON_PACKAGE);
+
+            if (user != null) {
+                Package[] packages = UserService.getUserPackages(user);
+                if (packages == null)
+                    packages = new Package[] { basePackage.getPackage() };
+                for (Package aPackage : packages) {
+                    List<Link> links = BasicPackageService.getInstance().getPackage(aPackage.getId()).getPackage().getLinks();
+                    for (Link link : links) {
+                        try {
+                            if (!link.isHidden())
+                                postList.addAll(VKParser.getInstance(link.getUrlAddress()).getPosts(offset * count, count));
+                        } catch (ParserException e) {
+                            System.err.println(e.getMessage());
+                        }
+                    }
+                }
+            }
+
+            JsonObject jsonObject = new JsonObject();
+            JsonArray postArray = new JsonArray();
+
+            for (Post post
+                    : postList.stream()
+                    .sorted((o1, o2) -> -Long.compare(o1.getTime(), o2.getTime()))
+                    .collect(Collectors.toList())) {
+                parsePostToJson(post, postArray);
+            }
+
+            jsonObject.add("response", postArray);
+
+            return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
+
         }
 
-        postList.sort(Comparator.comparingLong(Post::getTime).reversed());
-
-        JsonObject jsonObject = new JsonObject();
-        JsonArray postArray = new JsonArray();
-
-        for (Post post : postList) {
-            parsePostToJson(post, postArray);
-        }
-
-        jsonObject.add("response", postArray);
-
-        return new ResponseEntity<>(jsonObject.toString(), HttpStatus.OK);
     }
 
     private void parsePostToJson(Post post, JsonArray postArray) {
