@@ -116,7 +116,13 @@ public class VKParser implements SocialParser {
         JsonArray items = response.get("items").isJsonNull() ?
                 new JsonArray() : response.get("items").getAsJsonArray();
         List<Post> posts = new ArrayList<>();
-        items.forEach((item) -> posts.add(parsePost(item, headerUrl, aPackage)));
+        for (JsonElement item : items) {
+            try {
+                posts.add(parsePost(item, headerUrl, aPackage));
+            } catch (Exception ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
         return posts;
     }
 
@@ -237,7 +243,6 @@ public class VKParser implements SocialParser {
             parse(start, limit, aPackage);
         } catch (ParserException e) {
             e.printStackTrace();
-            return new ArrayList<>();
         }
         return list;
     }

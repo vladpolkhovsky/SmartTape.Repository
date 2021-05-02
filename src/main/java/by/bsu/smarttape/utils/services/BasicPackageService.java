@@ -166,7 +166,20 @@ public class BasicPackageService implements PackageService {
 
     @Override
     public PackageStatus deletePackage(long id) {
-        return null;
+        DataBaseSessionService.safetyOperation(session -> {
+            Package aPackage = new Package();
+            aPackage.setId(id);
+            session.evict(aPackage);
+            session.delete(aPackage);
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Link> criteriaQuery = criteriaBuilder.createQuery(Link.class);
+            Root<Link> linkRoot = criteriaQuery.from(Link.class);
+            criteriaQuery.select(linkRoot)
+                    .where(criteriaBuilder.equal(linkRoot.get("packageId"), aPackage.getId()));
+            TypedQuery<Link> query = session.createQuery(criteriaQuery);
+            query.getResultList().forEach(link -> delLink(session, link));
+        });
+        return new PackageStatus(SimpleStatus.OK, "OK", null);
     }
 
     @Override

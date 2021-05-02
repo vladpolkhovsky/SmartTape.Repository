@@ -186,6 +186,8 @@ public class UserService {
     }
 
     public static Package[] getUserPackages(User user) {
+        if (user == null)
+            return null;
         try {
             Session userFindSession = DataBaseSessionService.getSession();
             CriteriaBuilder criteriaBuilder = userFindSession.getCriteriaBuilder();

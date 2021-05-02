@@ -4,7 +4,7 @@ let count = 10;
 
 const feed_center = document.getElementsByClassName("feed-center")[0];
 
-let id = 1;
+let id = -1;
 
 const queryString = window.location.search;
 console.log(queryString);

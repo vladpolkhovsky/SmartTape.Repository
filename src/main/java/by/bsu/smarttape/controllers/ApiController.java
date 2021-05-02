@@ -34,6 +34,23 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api")
 public class ApiController {
 
+    @GetMapping(value = "/deletePackage")
+    public RedirectView delete(@RequestParam(value = "id") long id, HttpServletRequest request) {
+        User user = ActiveSessionService.getUserBySession(request.getSession());
+
+        PackageStatus packageStatus = BasicPackageService.getInstance().getPackage(id);
+        Package aPackage = packageStatus.getPackage();
+
+        if (aPackage == null || user == null)
+            return new RedirectView("/settings/");
+
+        if (aPackage.getOwnerID() == user.getId()) {
+            BasicPackageService.getInstance().deletePackage(id);
+        }
+
+        return new RedirectView("/settings/");
+    }
+
     @GetMapping(value = "/create-new-package")
     public RedirectView createNewPackage(HttpServletRequest request) throws IOException {
         User user = ActiveSessionService.getUserBySession(request.getSession());
@@ -158,19 +175,18 @@ public class ApiController {
 
             basePackage = BasicPackageService.getInstance().getPackage(BasicPackageService.NON_LOGON_PACKAGE);
 
-            if (user != null) {
-                Package[] packages = UserService.getUserPackages(user);
-                if (packages == null)
-                    packages = new Package[] { basePackage.getPackage() };
-                for (Package aPackage : packages) {
-                    List<Link> links = BasicPackageService.getInstance().getPackage(aPackage.getId()).getPackage().getLinks();
-                    for (Link link : links) {
-                        try {
-                            if (!link.isHidden())
-                                postList.addAll(VKParser.getInstance(link.getUrlAddress()).getPosts(offset * count, count, aPackage));
-                        } catch (ParserException e) {
-                            System.err.println(e.getMessage());
-                        }
+            Package[] packages = UserService.getUserPackages(user);
+
+            if (packages == null)
+                packages = new Package[] { basePackage.getPackage() };
+            for (Package aPackage : packages) {
+                List<Link> links = BasicPackageService.getInstance().getPackage(aPackage.getId()).getPackage().getLinks();
+                for (Link link : links) {
+                    try {
+                        if (!link.isHidden())
+                            postList.addAll(VKParser.getInstance(link.getUrlAddress()).getPosts(offset * count, count, aPackage));
+                    } catch (ParserException e) {
+                        System.err.println(e.getMessage());
                     }
                 }
             }

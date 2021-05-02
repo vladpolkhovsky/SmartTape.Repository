@@ -28,7 +28,11 @@ function getPackagesInfo() {
 }
 
 function createClickablePackage(name, pid, isFirst) {
-    return "<span><a id=\"pid-" + pid + "\" " + (isFirst ? "class=\"active\"" : "") + " onclick=\"select("+pid+")\">" + name + "</a></span>";
+    return "<span><a  style=\"margin-left: 0px;\" id=\"pid-"
+        + pid + "\" " + (isFirst ? "class=\"active\"" : "")
+        + " onclick=\"select("+pid+")\">" + name
+        + "</a></span><a style=\"margin-right: 30px;\" onclick=\"deletePackage(" + pid + ")\">&#10060;</a>";
+
 }
 
 let pLinksArea = document.getElementById("pLinksList");
@@ -114,6 +118,7 @@ function displayPackages(pArray) {
     for (let indx = 0; indx < pArray.length; indx++) {
         let package = pArray[indx];
         let cLiItem = document.createElement("li");
+        cLiItem.classList.add("pLiLine");
         pListUl.appendChild(cLiItem);
         cLiItem.innerHTML = createClickablePackage(package.name, package.id, indx === 0);
         if (indx == 0) {
@@ -154,6 +159,16 @@ function addNewLink() {
 function createNewPackage() {
     let xhr = new XMLHttpRequest();
     let url = '/api/create-new-package';
+    console.log(url);
+    xhr.open('GET', url, false);
+    xhr.send();
+    document.location.reload();
+}
+
+function deletePackage(pid) {
+    console.log("delete - " + pid);
+    let xhr = new XMLHttpRequest();
+    let url = '/api/deletePackage?id=' + pid;
     console.log(url);
     xhr.open('GET', url, false);
     xhr.send();
